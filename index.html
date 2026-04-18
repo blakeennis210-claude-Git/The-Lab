@@ -645,6 +645,11 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
 </div>
 
 <script>
+// Safe onclick wrappers - defined first so HTML onclick attrs always work
+function generateSessionPlan(){ if(window._generateSessionPlan) window._generateSessionPlan(); else setTimeout(generateSessionPlan,100); }
+function closeSessionPlan(){ if(window._closeSessionPlan) window._closeSessionPlan(); }
+function printSessionPlan(){ if(window._printSessionPlan) window._printSessionPlan(); }
+
 // ══════════════════════════════════════════
 // DATA
 // ══════════════════════════════════════════
@@ -1916,7 +1921,7 @@ function getSkillPlan(catId, skillName) {
   };
 }
 
-function generateSessionPlan() {
+window._generateSessionPlan = function() {
   if(workoutOrder.length === 0 && philWorkout.length === 0) {
     alert('Add some moves to your workout first!');
     return;
@@ -2036,11 +2041,11 @@ function generateSessionPlan() {
   document.getElementById('sessionPlanPanel').classList.add('open');
 }
 
-function closeSessionPlan() {
+window._closeSessionPlan = function() {
   document.getElementById('sessionPlanPanel').classList.remove('open');
 }
 
-function printSessionPlan() {
+window._printSessionPlan = function() {
   const meta = document.getElementById('sessionPlanMeta').textContent;
   const body = document.getElementById('sessionPlanBody').innerText;
   const w = window.open('', '_blank');
