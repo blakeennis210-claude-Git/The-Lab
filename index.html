@@ -921,7 +921,7 @@ function renderBagContent(){
   updatePip();
 }
 
-function esc(s){ return s.replace(/'/g,"\\'"); }
+function esc(s){ return s.replace(/'/g,"&apos;"); }
 
 function toggleSkill(catId, skill){
   const key = getKey(catId,skill);
@@ -1784,9 +1784,17 @@ w.document.close(); w.print();
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
-renderBagSidebar();
-renderBagContent();
-renderHandles();
+function init(){
+try { renderBagSidebar(); } catch(e){ console.error(‘renderBagSidebar’,e); }
+try { renderBagContent(); } catch(e){ console.error(‘renderBagContent’,e); }
+try { renderHandles(); } catch(e){ console.error(‘renderHandles’,e); }
+}
+
+if(document.readyState === ‘loading’){
+document.addEventListener(‘DOMContentLoaded’, init);
+} else {
+init();
+}
 </script>
 
 </body>
