@@ -1,0 +1,1790 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE LAB</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Barlow+Condensed:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0d0a14;
+  --surface: #130f1e;
+  --card: #1a1428;
+  --card2: #1f1930;
+  --border: #2a2040;
+  --border2: #3a2f55;
+  --accent: #9333ea;
+  --accent-bright: #b060f8;
+  --accent2: #c084fc;
+  --accent3: #ffffff;
+  --accent4: #7c3aed;
+  --accent5: #e879f9;
+  --text: #ffffff;
+  --text2: #c4b5d8;
+  --muted: #6b5a85;
+  --dish-accent: #b060f8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed',sans-serif;min-height:100vh;overflow-x:hidden;}
+
+/* ── NAV TABS ── */
+.top-nav{position:sticky;top:0;z-index:200;background:rgba(8,8,8,0.97);backdrop-filter:blur(8px);border-bottom:1px solid var(–border);display:flex;align-items:center;gap:0;padding:0 16px;height:52px;}
+.nav-logo{font-family:‘Bebas Neue’,sans-serif;font-size:22px;letter-spacing:4px;color:var(–accent);margin-right:20px;white-space:nowrap;line-height:1.1;}
+.nav-logo span{color:var(–text);}
+.nav-tabs{display:flex;gap:2px;flex:1;overflow-x:auto;scrollbar-width:none;}
+.nav-tabs::-webkit-scrollbar{display:none;}
+.nav-tab{font-family:‘Bebas Neue’,sans-serif;letter-spacing:2px;font-size:13px;background:none;border:none;color:var(–muted);padding:4px 14px;cursor:pointer;white-space:nowrap;border-bottom:3px solid transparent;height:52px;transition:all .15s;}
+.nav-tab:hover{color:var(–text2);}
+.nav-tab.active{color:var(–text);border-bottom-color:var(–accent2);}
+.nav-tab.tab-handles.active{border-bottom-color:var(–accent-bright);}
+.nav-tab.tab-dish.active{border-bottom-color:var(–accent2);}
+
+/* ── PAGES ── */
+.page{display:none;min-height:calc(100vh - 52px);}
+.page.active{display:block;}
+
+/* ── SHARED LAYOUT ── */
+.page-layout{display:grid;grid-template-columns:230px 1fr;min-height:calc(100vh - 52px);}
+.sidebar{border-right:1px solid var(–border);padding:14px 0;position:sticky;top:52px;height:calc(100vh - 52px);overflow-y:auto;}
+.sidebar::-webkit-scrollbar{width:3px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(–border2);}
+.content{padding:20px;overflow-y:auto;}
+
+.sidebar-label{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);letter-spacing:2px;padding:0 14px 8px;text-transform:uppercase;}
+.sidebar-divider{height:1px;background:var(–border);margin:10px 14px;}
+
+.cat-btn{width:100%;text-align:left;background:none;border:none;border-left:3px solid transparent;padding:9px 14px;cursor:pointer;display:flex;align-items:center;gap:9px;transition:all .1s;}
+.cat-btn:hover{background:var(–surface);}
+.cat-btn.active{background:var(–card);border-left-color:var(–accent-bright);}
+.cat-btn .ci{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+.cat-btn .cn{font-weight:700;font-size:13px;color:var(–text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.cat-btn.active .cn{color:var(–accent2);}
+.cat-btn .cc{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);margin-top:1px;}
+
+/* ── SECTION HEADER ── */
+.sec-header{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+.sec-title{font-family:‘Bebas Neue’,sans-serif;font-size:32px;letter-spacing:3px;line-height:1;color:var(–text);}
+.sec-sub{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);margin-top:3px;letter-spacing:1px;}
+.btn-row{display:flex;gap:6px;flex-wrap:wrap;}
+
+/* ── BUTTONS ── */
+.btn{font-family:‘Bebas Neue’,sans-serif;letter-spacing:2px;font-size:13px;border:none;cursor:pointer;padding:7px 16px;border-radius:2px;transition:all .15s;white-space:nowrap;}
+.btn-ghost{background:transparent;border:1px solid var(–border2);color:var(–muted);}
+.btn-ghost:hover{border-color:var(–accent);color:var(–accent);}
+.btn-primary{background:var(–accent);color:#fff;}
+.btn-primary:hover{background:var(–accent-bright);}
+.btn-primary:disabled{background:#1a1428;color:var(–muted);cursor:not-allowed;}
+.btn-orange{background:var(–accent4);color:#fff;}
+.btn-orange:hover{background:var(–accent);}
+.btn-green{background:#ffffff;color:#0d0a14;}
+.btn-green:hover{background:#e0d0f8;}
+.btn-blue{background:var(–accent);color:#fff;}
+.btn-blue:hover{background:var(–accent-bright);}
+.btn-purple{background:var(–accent5);color:#fff;}
+.btn-purple:hover{background:#9333ea;}
+.btn-sm{font-size:11px;padding:4px 10px;}
+
+/* ── SKILLS GRID ── */
+.skills-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:7px;}
+.skill-card{background:var(–card);border:1px solid var(–border);border-radius:3px;padding:11px 13px;cursor:pointer;transition:all .12s;position:relative;user-select:none;}
+.skill-card:hover{background:var(–card2);border-color:var(–border2);}
+.skill-card.selected{border-color:var(–accent);background:rgba(147,51,234,.1);}
+.skill-card.selected::after{content:‘✓’;position:absolute;top:8px;right:9px;font-size:10px;color:var(–accent2);}
+.skill-name{font-weight:700;font-size:13px;line-height:1.3;padding-right:14px;}
+.skill-card.selected .skill-name{color:var(–accent2);}
+.skill-tag{display:inline-block;margin-top:5px;font-family:‘Space Mono’,monospace;font-size:7px;color:var(–muted);letter-spacing:1px;text-transform:uppercase;}
+
+/* ── FINISH PICKER ── */
+.finish-bar{margin-top:6px;display:flex;gap:4px;flex-wrap:wrap;}
+.finish-chip{font-family:‘Space Mono’,monospace;font-size:8px;padding:3px 7px;border-radius:100px;border:1px solid var(–border2);color:var(–muted);cursor:pointer;transition:all .1s;letter-spacing:.5px;}
+.finish-chip:hover{border-color:var(–accent2);color:var(–accent2);}
+.finish-chip.active-rim{background:rgba(147,51,234,.2);border-color:var(–accent-bright);color:var(–accent2);}
+.finish-chip.active-middy{background:rgba(192,132,252,.15);border-color:var(–accent2);color:var(–accent2);}
+.finish-chip.active-three{background:rgba(255,255,255,.1);border-color:#fff;color:#fff;}
+
+/* ── ALL VIEW ── */
+.all-cols{columns:2;column-gap:14px;}
+@media(max-width:700px){.all-cols{columns:1;}}
+.all-block{break-inside:avoid;margin-bottom:14px;background:var(–card);border:1px solid var(–border);border-radius:3px;overflow:hidden;}
+.all-block-hdr{background:var(–surface);padding:9px 13px;display:flex;align-items:center;gap:7px;border-bottom:1px solid var(–border);}
+.all-block-icon{font-size:13px;}
+.all-block-title{font-family:‘Bebas Neue’,sans-serif;font-size:15px;letter-spacing:2px;color:var(–accent2);flex:1;}
+.all-block-count{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);}
+.all-row{padding:7px 13px;border-bottom:1px solid rgba(255,255,255,.025);cursor:pointer;display:flex;align-items:center;justify-content:space-between;transition:all .1s;font-size:13px;font-weight:600;}
+.all-row:last-child{border-bottom:none;}
+.all-row:hover{background:rgba(255,255,255,.025);}
+.all-row.selected{background:rgba(147,51,234,.12);color:var(–accent2);}
+.all-check{font-size:10px;color:var(–accent2);opacity:0;}
+.all-row.selected .all-check{opacity:1;}
+
+/* ── WORKOUT PANEL ── */
+.panel-overlay{display:none;position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.88);backdrop-filter:blur(6px);align-items:center;justify-content:center;padding:16px;}
+.panel-overlay.open{display:flex;}
+.panel-modal{background:var(–surface);border:1px solid var(–border2);border-radius:4px;width:100%;max-width:620px;max-height:92vh;overflow:hidden;display:flex;flex-direction:column;}
+.panel-hdr{padding:18px 22px;border-bottom:1px solid var(–border);display:flex;align-items:center;justify-content:space-between;background:var(–surface);}
+.panel-title{font-family:‘Bebas Neue’,sans-serif;font-size:26px;letter-spacing:3px;color:var(–accent2);}
+.panel-close{background:none;border:1px solid var(–border2);color:var(–muted);width:30px;height:30px;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:16px;border-radius:2px;transition:all .12s;}
+.panel-close:hover{border-color:var(–accent);color:var(–accent);}
+.panel-body{flex:1;overflow-y:auto;padding:16px 22px;}
+.panel-body::-webkit-scrollbar{width:3px;}
+.panel-body::-webkit-scrollbar-thumb{background:var(–border2);}
+.panel-footer{padding:14px 22px;border-top:1px solid var(–border);display:flex;gap:8px;justify-content:flex-end;flex-wrap:wrap;}
+
+/* workout items */
+.w-item{background:var(–card);border:1px solid var(–border);border-radius:3px;padding:11px 13px;margin-bottom:6px;}
+.w-item-top{display:flex;align-items:center;gap:10px;}
+.w-num{font-family:‘Bebas Neue’,sans-serif;font-size:22px;color:var(–accent2);width:28px;flex-shrink:0;text-align:center;}
+.w-info{flex:1;min-width:0;}
+.w-name{font-weight:700;font-size:14px;}
+.w-meta{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);margin-top:2px;}
+.w-rm{background:none;border:none;color:var(–muted);cursor:pointer;font-size:13px;padding:3px 6px;border-radius:2px;transition:all .12s;}
+.w-rm:hover{color:var(–accent);background:rgba(232,65,10,.1);}
+.w-finish-row{margin-top:8px;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+.w-finish-label{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);letter-spacing:1px;}
+.finish-badge{font-family:‘Space Mono’,monospace;font-size:8px;padding:3px 8px;border-radius:100px;letter-spacing:.5px;}
+.badge-rim{background:rgba(147,51,234,.2);color:var(–accent2);border:1px solid var(–accent2);}
+.badge-middy{background:rgba(192,132,252,.15);color:var(–accent2);border:1px solid var(–accent2);}
+.badge-three{background:rgba(255,255,255,.08);color:#ffffff;border:1px solid rgba(255,255,255,.4);}
+.badge-handles{background:rgba(147,51,234,.2);color:var(–accent2);border:1px solid var(–accent2);}
+.finish-rand{font-family:‘Bebas Neue’,sans-serif;font-size:11px;letter-spacing:1px;padding:3px 8px;border:1px solid var(–border2);background:none;color:var(–muted);cursor:pointer;border-radius:2px;transition:all .12s;}
+.finish-rand:hover{border-color:var(–accent2);color:var(–accent2);}
+
+/* ── HANDLES PAGE ── */
+.handles-intro{background:var(–card);border:1px solid var(–border);border-radius:3px;padding:18px;margin-bottom:20px;}
+.handles-intro h2{font-family:‘Bebas Neue’,sans-serif;font-size:22px;letter-spacing:3px;color:var(–text);margin-bottom:6px;}
+.handles-intro p{font-size:13px;color:var(–text2);line-height:1.6;}
+
+.handle-section{margin-bottom:28px;}
+.handle-section-title{font-family:‘Bebas Neue’,sans-serif;font-size:18px;letter-spacing:2px;color:var(–accent2);border-bottom:1px solid rgba(192,132,252,.2);padding-bottom:6px;margin-bottom:12px;}
+
+.phil-builder{background:var(–card);border:1px solid rgba(147,51,234,.3);border-radius:4px;padding:18px;margin-top:20px;}
+.phil-header{font-family:‘Bebas Neue’,sans-serif;font-size:20px;letter-spacing:3px;color:var(–text);margin-bottom:4px;}
+.phil-sub{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);margin-bottom:14px;}
+.phil-workout-item{background:var(–surface);border:1px solid var(–border);border-radius:3px;padding:10px 13px;margin-bottom:6px;}
+.phil-step-num{font-family:‘Bebas Neue’,sans-serif;font-size:18px;color:var(–accent2);}
+.phil-step-name{font-weight:700;font-size:14px;}
+.phil-step-cues{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);margin-top:4px;line-height:1.6;}
+.phil-reps{display:inline-block;background:rgba(147,51,234,.15);border:1px solid rgba(192,132,252,.3);color:var(–accent2);font-family:‘Space Mono’,monospace;font-size:8px;padding:2px 7px;border-radius:100px;margin-top:5px;}
+
+/* ── DR DISH PAGE ── */
+.dish-page-bg{background:linear-gradient(135deg,rgba(147,51,234,.08) 0%,transparent 60%);min-height:calc(100vh - 52px);padding:24px;}
+.dish-header{text-align:center;margin-bottom:28px;}
+.dish-logo{font-family:‘Bebas Neue’,sans-serif;font-size:48px;letter-spacing:6px;color:var(–accent2);line-height:1;}
+.dish-logo span{color:var(–text);}
+.dish-tagline{font-family:‘Space Mono’,monospace;font-size:10px;color:var(–muted);letter-spacing:2px;margin-top:4px;}
+
+.dish-controls{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;max-width:900px;margin:0 auto 28px;}
+.dish-control-card{background:var(–card);border:1px solid var(–border);border-radius:4px;padding:16px;}
+.dish-control-label{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);letter-spacing:2px;margin-bottom:10px;}
+.dish-control-title{font-family:‘Bebas Neue’,sans-serif;font-size:16px;letter-spacing:2px;color:var(–dish-accent);margin-bottom:8px;}
+.dish-select{width:100%;background:var(–surface);border:1px solid var(–border2);color:var(–text);font-family:‘Barlow Condensed’,sans-serif;font-weight:600;font-size:14px;padding:8px 10px;border-radius:2px;cursor:pointer;appearance:none;}
+.dish-select:focus{outline:none;border-color:var(–accent2);}
+.dish-radio-group{display:flex;gap:6px;flex-wrap:wrap;}
+.dish-radio{display:none;}
+.dish-radio-label{font-family:‘Space Mono’,monospace;font-size:9px;padding:5px 10px;border:1px solid var(–border2);color:var(–muted);cursor:pointer;border-radius:2px;transition:all .12s;letter-spacing:.5px;}
+.dish-radio:checked + .dish-radio-label{border-color:var(–accent2);color:var(–accent2);background:rgba(147,51,234,.15);}
+
+.dish-generate-row{text-align:center;margin-bottom:28px;}
+.dish-generate-row .btn{font-size:16px;padding:12px 40px;letter-spacing:3px;}
+
+.dish-workout-output{max-width:900px;margin:0 auto;}
+.dish-workout-title{font-family:‘Bebas Neue’,sans-serif;font-size:28px;letter-spacing:4px;color:var(–accent2);margin-bottom:6px;}
+.dish-workout-meta{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);letter-spacing:1px;margin-bottom:18px;}
+.dish-station{background:var(–card);border:1px solid var(–border);border-radius:4px;margin-bottom:12px;overflow:hidden;}
+.dish-station-hdr{background:var(–surface);padding:12px 16px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(–border);}
+.dish-station-num{font-family:‘Bebas Neue’,sans-serif;font-size:24px;color:var(–accent2);width:36px;flex-shrink:0;}
+.dish-station-info{flex:1;}
+.dish-station-name{font-family:‘Bebas Neue’,sans-serif;font-size:18px;letter-spacing:2px;}
+.dish-station-sub{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);margin-top:2px;}
+.dish-station-badge{font-family:‘Space Mono’,monospace;font-size:8px;padding:3px 8px;border-radius:100px;}
+.badge-catch{background:rgba(147,51,234,.15);color:var(–accent2);border:1px solid var(–accent2);}
+.badge-off-dribble{background:rgba(124,58,237,.2);color:var(–accent-bright);border:1px solid var(–accent-bright);}
+.badge-combo{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.3);}
+
+.dish-station-body{padding:14px 16px;}
+.dish-athlete-row{display:flex;align-items:flex-start;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.03);}
+.dish-athlete-row:last-child{border-bottom:none;}
+.dish-athlete-label{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–dish-accent);width:60px;flex-shrink:0;margin-top:2px;letter-spacing:.5px;}
+.dish-athlete-task{flex:1;}
+.dish-task-name{font-weight:700;font-size:14px;}
+.dish-task-detail{font-family:‘Space Mono’,monospace;font-size:9px;color:var(–muted);margin-top:3px;line-height:1.6;}
+.dish-reps-badge{display:inline-flex;align-items:center;gap:6px;margin-top:5px;background:rgba(147,51,234,.1);border:1px solid rgba(192,132,252,.25);border-radius:100px;padding:3px 9px;}
+.dish-reps-text{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–accent2);}
+
+.dish-timing-bar{background:var(–surface);border-top:1px solid var(–border);padding:10px 16px;display:flex;gap:16px;flex-wrap:wrap;}
+.dish-timing-item{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);}
+.dish-timing-item span{color:var(–text);font-weight:700;}
+
+.dish-summary{background:var(–card);border:1px solid rgba(147,51,234,.3);border-radius:4px;padding:16px;margin-top:16px;}
+.dish-summary-title{font-family:‘Bebas Neue’,sans-serif;font-size:16px;letter-spacing:2px;color:var(–accent2);margin-bottom:10px;}
+.dish-summary-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;}
+.dish-stat{text-align:center;}
+.dish-stat-num{font-family:‘Bebas Neue’,sans-serif;font-size:28px;color:var(–accent2);}
+.dish-stat-label{font-family:‘Space Mono’,monospace;font-size:8px;color:var(–muted);letter-spacing:1px;}
+
+/* ── RESPONSIVE ── */
+@media(max-width:640px){
+.page-layout{grid-template-columns:1fr;}
+.sidebar{position:static;height:auto;border-right:none;border-bottom:1px solid var(–border);display:flex;flex-wrap:wrap;gap:4px;padding:8px;}
+.sidebar-label,.sidebar-divider{display:none;}
+.cat-btn{width:auto;border:1px solid var(–border);border-left:none;border-radius:2px;padding:5px 10px;}
+.cat-btn.active{border-color:var(–accent);border-left:none;}
+.cat-btn .cc{display:none;}
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeIn{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:none;}}
+.dish-station{animation:fadeIn .25s ease both;}
+.dish-station:nth-child(1){animation-delay:.03s;}
+.dish-station:nth-child(2){animation-delay:.07s;}
+.dish-station:nth-child(3){animation-delay:.11s;}
+.dish-station:nth-child(4){animation-delay:.15s;}
+.dish-station:nth-child(5){animation-delay:.19s;}
+.dish-station:nth-child(6){animation-delay:.23s;}
+
+.tab-pip{display:inline-block;width:6px;height:6px;border-radius:50%;margin-left:5px;vertical-align:middle;}
+.pip-red{background:var(–accent2);}
+.pip-orange{background:var(–accent-bright);}
+.pip-blue{background:var(–accent2);}
+
+.toggle-group{display:flex;gap:4px;flex-wrap:wrap;}
+.tog{font-family:‘Space Mono’,monospace;font-size:8px;padding:4px 9px;border:1px solid var(–border2);color:var(–text2);background:none;cursor:pointer;border-radius:2px;transition:all .12s;letter-spacing:.5px;}
+.tog:hover{border-color:var(–text2);color:var(–text2);}
+.tog.on-rim{border-color:var(–accent2);color:var(–accent2);background:rgba(147,51,234,.12);}
+.tog.on-middy{border-color:var(–accent2);color:var(–accent2);background:rgba(192,132,252,.1);}
+.tog.on-three{border-color:#fff;color:#fff;background:rgba(255,255,255,.06);}
+
+.info-box{background:rgba(255,255,255,.02);border:1px solid var(–border);border-radius:3px;padding:12px 14px;margin-bottom:16px;}
+.info-box p{font-size:13px;color:var(–text2);line-height:1.6;}
+.info-box strong{color:var(–text);}
+</style>
+
+</head>
+<body>
+
+<nav class="top-nav">
+  <div style="display:flex;align-items:center;gap:10px;margin-right:16px;flex-shrink:0;">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="38" height="38" style="flex-shrink:0;">
+  <!-- OUTER SILHOUETTE: ears + head + cheek ruffs all one connected shape -->
+  <path d="
+    M 55,10
+    L 38,60
+    L 20,52
+    Q 2,70 2,100
+    Q 2,148 38,168
+    Q 58,190 100,192
+    Q 142,190 162,168
+    Q 198,148 198,100
+    Q 198,70 180,52
+    L 162,60
+    L 145,10
+    L 128,52
+    Q 114,40 100,40
+    Q 86,40 72,52
+    Z
+  " fill="#c084fc"/>
+
+  <!-- EAR INNER CUTOUTS (negative space) -->
+
+  <!-- Left ear inner -->
+
+  <path d="M 58,18 L 46,58 L 70,54 Z" fill="#0d0a14"/>
+  <!-- Right ear inner -->
+  <path d="M 142,18 L 154,58 L 130,54 Z" fill="#0d0a14"/>
+
+  <!-- BROW / FOREHEAD structure: dark angular brows create the angry look -->
+
+  <!-- Left brow wedge -->
+
+  <path d="M 28,88 Q 50,60 78,78 Q 64,90 58,100 Q 40,96 28,88 Z" fill="#0d0a14"/>
+  <!-- Right brow wedge -->
+  <path d="M 172,88 Q 150,60 122,78 Q 136,90 142,100 Q 160,96 172,88 Z" fill="#0d0a14"/>
+  <!-- Center forehead dark stripe between brows -->
+  <path d="M 78,78 Q 100,64 122,78 Q 110,86 100,84 Q 90,86 78,78 Z" fill="#0d0a14"/>
+
+  <!-- EYES: negative cutouts inside brow area -->
+
+  <!-- Left eye -->
+
+  <ellipse cx="64" cy="94" rx="18" ry="13" fill="#c084fc"/>
+  <!-- Left pupil slit -->
+  <ellipse cx="64" cy="94" rx="5" ry="11" fill="#0d0a14"/>
+  <!-- Left eye shine -->
+  <circle cx="70" cy="88" r="4" fill="white" opacity="0.85"/>
+
+  <!-- Right eye -->
+
+  <ellipse cx="136" cy="94" rx="18" ry="13" fill="#c084fc"/>
+  <!-- Right pupil slit -->
+  <ellipse cx="136" cy="94" rx="5" ry="11" fill="#0d0a14"/>
+  <!-- Right eye shine -->
+  <circle cx="142" cy="88" r="4" fill="white" opacity="0.85"/>
+
+  <!-- CHEEK RUFFS: wide flared shapes on sides, same purple as head -->
+
+  <!-- Left ruff outer bump -->
+
+  <path d="M 2,100 Q 2,130 20,148 Q 10,125 18,108 Z" fill="#9333ea"/>
+  <!-- Right ruff outer bump -->
+  <path d="M 198,100 Q 198,130 180,148 Q 190,125 182,108 Z" fill="#9333ea"/>
+
+  <!-- NOSE -->
+
+  <path d="M 88,118 Q 100,112 112,118 L 108,126 Q 100,130 92,126 Z" fill="#0d0a14"/>
+  <!-- Philtrum -->
+  <line x1="100" y1="128" x2="100" y2="136" stroke="#0d0a14" stroke-width="3"/>
+
+  <!-- MOUTH OPEN: dark cavity -->
+
+<path d="
+M 52,136
+Q 60,128 76,130
+Q 88,132 100,132
+Q 112,132 124,130
+Q 140,128 148,136
+Q 140,170 100,172
+Q 60,170 52,136 Z
+" fill="#0d0a14"/>
+
+  <!-- UPPER TEETH (sitting above mouth opening line) -->
+
+  <!-- Left fang - long pointed -->
+
+  <path d="M 62,134 L 56,160 L 70,134 Z" fill="white"/>
+  <!-- Left incisor -->
+  <rect x="72" y="132" width="10" height="14" rx="2" fill="white"/>
+  <!-- Center gap -->
+  <!-- Right incisor -->
+  <rect x="118" y="132" width="10" height="14" rx="2" fill="white"/>
+  <!-- Right fang - long pointed -->
+  <path d="M 138,134 L 144,160 L 130,134 Z" fill="white"/>
+
+  <!-- LOWER TEETH row inside mouth -->
+
+  <rect x="78" y="156" width="9" height="10" rx="2" fill="white"/>
+  <rect x="91" y="158" width="9" height="8" rx="2" fill="white"/>
+  <rect x="104" y="158" width="9" height="8" rx="2" fill="white"/>
+  <rect x="117" y="156" width="9" height="10" rx="2" fill="white"/>
+
+  <!-- WHISKER DOTS on muzzle -->
+
+  <circle cx="72" cy="122" r="3" fill="#0d0a14"/>
+  <circle cx="72" cy="132" r="3" fill="#0d0a14"/>
+  <circle cx="128" cy="122" r="3" fill="#0d0a14"/>
+  <circle cx="128" cy="132" r="3" fill="#0d0a14"/>
+
+  <!-- CHIN tuft line detail -->
+
+  <path d="M 70,168 Q 100,176 130,168" fill="none" stroke="#9333ea" stroke-width="2"/>
+</svg>
+  <div class="nav-logo" style="margin-right:0;">THE<span>LAB</span><div style="font-family:'Space Mono',monospace;font-size:7px;letter-spacing:2px;color:var(--muted);line-height:1;margin-top:1px;">INTENTIONAL REPS. UNDENIABLE RESULTS.</div></div>
+</div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showTab('bag')">🥊 BAG WORK<span class="tab-pip pip-red" id="pip-bag" style="display:none"></span></button>
+    <button class="nav-tab tab-handles" onclick="showTab('handles')">🔁 HANDLES<span class="tab-pip pip-orange"></span></button>
+    <button class="nav-tab" onclick="showTab('workout')">📋 MY WORKOUT<span class="tab-pip pip-red" id="pip-workout" style="display:none"></span></button>
+    <button class="nav-tab tab-dish" onclick="showTab('dish')">📡 DR. DISH<span class="tab-pip pip-blue"></span></button>
+  </div>
+</nav>
+
+<!-- ══════════ BAG WORK PAGE ══════════ -->
+
+<div class="page active" id="page-bag">
+  <div class="page-layout">
+    <nav class="sidebar" id="bag-sidebar"></nav>
+    <main class="content" id="bag-content"></main>
+  </div>
+</div>
+
+<!-- ══════════ HANDLES PAGE ══════════ -->
+
+<div class="page" id="page-handles">
+  <div style="padding:22px;max-width:900px;margin:0 auto;">
+    <div class="sec-header">
+      <div>
+        <div class="sec-title" style="color:var(--accent2)">HANDLES</div>
+        <div class="sec-sub">BALL SKILL DEVELOPMENT · PHIL HANDY STYLE</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-orange" onclick="generatePhilWorkout()">⚡ GENERATE PHIL WORKOUT</button>
+        <button class="btn btn-ghost" onclick="addHandlesToWorkout()">+ ADD TO WORKOUT</button>
+      </div>
+    </div>
+
+```
+<div class="info-box">
+  <p><strong>Phil Handy style</strong> — select the handles you want to work on, then generate a structured combo workout. The generator chains moves in a progressive order: stationary → walking → game-speed bursts, mixing unilateral and bilateral patterns.</p>
+</div>
+
+<div id="handles-grid"></div>
+<div id="phil-output"></div>
+```
+
+  </div>
+</div>
+
+<!-- ══════════ MY WORKOUT PAGE ══════════ -->
+
+<div class="page" id="page-workout">
+  <div style="padding:22px;max-width:700px;margin:0 auto;">
+    <div class="sec-header">
+      <div>
+        <div class="sec-title">MY WORKOUT</div>
+        <div class="sec-sub" id="workout-sub">0 MOVES · BUILD YOUR SESSION</div>
+      </div>
+      <div class="btn-row">
+        <button class="btn btn-ghost" onclick="shuffleWorkout()">⇄ SHUFFLE</button>
+        <button class="btn btn-ghost" onclick="clearWorkout()">CLEAR ALL</button>
+        <button class="btn btn-primary" onclick="printWorkout()">PRINT / SAVE</button>
+      </div>
+    </div>
+    <div id="full-workout-list">
+      <div style="text-align:center;padding:60px 20px;color:var(--muted);">
+        <div style="font-size:40px;margin-bottom:12px;">📋</div>
+        <div style="font-family:'Space Mono',monospace;font-size:10px;">SELECT MOVES FROM BAG WORK OR HANDLES TO BUILD YOUR SESSION</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ DR. DISH PAGE ══════════ -->
+
+<div class="page" id="page-dish">
+  <div class="dish-page-bg">
+    <div class="dish-header">
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:4px;">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="56" height="56" style="filter:drop-shadow(0 0 14px rgba(192,132,252,0.65));" >
+  <!-- OUTER SILHOUETTE: ears + head + cheek ruffs all one connected shape -->
+  <path d="
+    M 55,10
+    L 38,60
+    L 20,52
+    Q 2,70 2,100
+    Q 2,148 38,168
+    Q 58,190 100,192
+    Q 142,190 162,168
+    Q 198,148 198,100
+    Q 198,70 180,52
+    L 162,60
+    L 145,10
+    L 128,52
+    Q 114,40 100,40
+    Q 86,40 72,52
+    Z
+  " fill="#c084fc"/>
+
+  <!-- EAR INNER CUTOUTS (negative space) -->
+
+  <!-- Left ear inner -->
+
+  <path d="M 58,18 L 46,58 L 70,54 Z" fill="#0d0a14"/>
+  <!-- Right ear inner -->
+  <path d="M 142,18 L 154,58 L 130,54 Z" fill="#0d0a14"/>
+
+  <!-- BROW / FOREHEAD structure: dark angular brows create the angry look -->
+
+  <!-- Left brow wedge -->
+
+  <path d="M 28,88 Q 50,60 78,78 Q 64,90 58,100 Q 40,96 28,88 Z" fill="#0d0a14"/>
+  <!-- Right brow wedge -->
+  <path d="M 172,88 Q 150,60 122,78 Q 136,90 142,100 Q 160,96 172,88 Z" fill="#0d0a14"/>
+  <!-- Center forehead dark stripe between brows -->
+  <path d="M 78,78 Q 100,64 122,78 Q 110,86 100,84 Q 90,86 78,78 Z" fill="#0d0a14"/>
+
+  <!-- EYES: negative cutouts inside brow area -->
+
+  <!-- Left eye -->
+
+  <ellipse cx="64" cy="94" rx="18" ry="13" fill="#c084fc"/>
+  <!-- Left pupil slit -->
+  <ellipse cx="64" cy="94" rx="5" ry="11" fill="#0d0a14"/>
+  <!-- Left eye shine -->
+  <circle cx="70" cy="88" r="4" fill="white" opacity="0.85"/>
+
+  <!-- Right eye -->
+
+  <ellipse cx="136" cy="94" rx="18" ry="13" fill="#c084fc"/>
+  <!-- Right pupil slit -->
+  <ellipse cx="136" cy="94" rx="5" ry="11" fill="#0d0a14"/>
+  <!-- Right eye shine -->
+  <circle cx="142" cy="88" r="4" fill="white" opacity="0.85"/>
+
+  <!-- CHEEK RUFFS: wide flared shapes on sides, same purple as head -->
+
+  <!-- Left ruff outer bump -->
+
+  <path d="M 2,100 Q 2,130 20,148 Q 10,125 18,108 Z" fill="#9333ea"/>
+  <!-- Right ruff outer bump -->
+  <path d="M 198,100 Q 198,130 180,148 Q 190,125 182,108 Z" fill="#9333ea"/>
+
+  <!-- NOSE -->
+
+  <path d="M 88,118 Q 100,112 112,118 L 108,126 Q 100,130 92,126 Z" fill="#0d0a14"/>
+  <!-- Philtrum -->
+  <line x1="100" y1="128" x2="100" y2="136" stroke="#0d0a14" stroke-width="3"/>
+
+  <!-- MOUTH OPEN: dark cavity -->
+
+<path d="
+M 52,136
+Q 60,128 76,130
+Q 88,132 100,132
+Q 112,132 124,130
+Q 140,128 148,136
+Q 140,170 100,172
+Q 60,170 52,136 Z
+" fill="#0d0a14"/>
+
+  <!-- UPPER TEETH (sitting above mouth opening line) -->
+
+  <!-- Left fang - long pointed -->
+
+  <path d="M 62,134 L 56,160 L 70,134 Z" fill="white"/>
+  <!-- Left incisor -->
+  <rect x="72" y="132" width="10" height="14" rx="2" fill="white"/>
+  <!-- Center gap -->
+  <!-- Right incisor -->
+  <rect x="118" y="132" width="10" height="14" rx="2" fill="white"/>
+  <!-- Right fang - long pointed -->
+  <path d="M 138,134 L 144,160 L 130,134 Z" fill="white"/>
+
+  <!-- LOWER TEETH row inside mouth -->
+
+  <rect x="78" y="156" width="9" height="10" rx="2" fill="white"/>
+  <rect x="91" y="158" width="9" height="8" rx="2" fill="white"/>
+  <rect x="104" y="158" width="9" height="8" rx="2" fill="white"/>
+  <rect x="117" y="156" width="9" height="10" rx="2" fill="white"/>
+
+  <!-- WHISKER DOTS on muzzle -->
+
+  <circle cx="72" cy="122" r="3" fill="#0d0a14"/>
+  <circle cx="72" cy="132" r="3" fill="#0d0a14"/>
+  <circle cx="128" cy="122" r="3" fill="#0d0a14"/>
+  <circle cx="128" cy="132" r="3" fill="#0d0a14"/>
+
+  <!-- CHIN tuft line detail -->
+
+  <path d="M 70,168 Q 100,176 130,168" fill="none" stroke="#9333ea" stroke-width="2"/>
+</svg>
+        <div class="dish-logo" style="color:var(--accent2);">THE<span style="color:var(--text);">LAB</span></div>
+      </div>
+      <div class="dish-tagline">DR. DISH GENERATOR · INTENTIONAL REPS. UNDENIABLE RESULTS.</div>
+    </div>
+
+```
+<div class="dish-controls">
+  <div class="dish-control-card">
+    <div class="dish-control-label">ATHLETES</div>
+    <div class="dish-control-title">GROUP SIZE</div>
+    <select class="dish-select" id="dish-athletes">
+      <option value="3">3 Athletes</option>
+      <option value="4" selected>4 Athletes</option>
+      <option value="5">5 Athletes</option>
+      <option value="6">6 Athletes</option>
+    </select>
+  </div>
+  <div class="dish-control-card">
+    <div class="dish-control-label">DURATION</div>
+    <div class="dish-control-title">SESSION LENGTH</div>
+    <select class="dish-select" id="dish-duration">
+      <option value="20">20 Minutes</option>
+      <option value="30" selected>30 Minutes</option>
+      <option value="45">45 Minutes</option>
+      <option value="60">60 Minutes</option>
+    </select>
+  </div>
+  <div class="dish-control-card">
+    <div class="dish-control-label">FOCUS</div>
+    <div class="dish-control-title">WORKOUT TYPE</div>
+    <select class="dish-select" id="dish-focus">
+      <option value="shooting">Shooting — Catch & Shoot</option>
+      <option value="finishing">Finishing — Off-Dribble Layups</option>
+      <option value="combo" selected>Combo — Shoot + Finish</option>
+      <option value="competitive">Competitive — Games & Drills</option>
+      <option value="transition">Transition Offense</option>
+    </select>
+  </div>
+  <div class="dish-control-card">
+    <div class="dish-control-label">INTENSITY</div>
+    <div class="dish-control-title">TEMPO</div>
+    <div class="dish-radio-group">
+      <input type="radio" name="dish-tempo" id="t-dev" value="development" class="dish-radio">
+      <label for="t-dev" class="dish-radio-label">DEVELOPMENT</label>
+      <input type="radio" name="dish-tempo" id="t-comp" value="competitive" class="dish-radio" checked>
+      <label for="t-comp" class="dish-radio-label">COMPETITIVE</label>
+      <input type="radio" name="dish-tempo" id="t-elite" value="elite" class="dish-radio">
+      <label for="t-elite" class="dish-radio-label">ELITE</label>
+    </div>
+  </div>
+  <div class="dish-control-card">
+    <div class="dish-control-label">SPOTS</div>
+    <div class="dish-control-title">SHOOTING ZONES</div>
+    <div class="dish-radio-group">
+      <input type="radio" name="dish-zones" id="z-all" value="all" class="dish-radio" checked>
+      <label for="z-all" class="dish-radio-label">ALL ZONES</label>
+      <input type="radio" name="dish-zones" id="z-mid" value="midrange" class="dish-radio">
+      <label for="z-mid" class="dish-radio-label">MID RANGE</label>
+      <input type="radio" name="dish-zones" id="z-three" value="threes" class="dish-radio">
+      <label for="z-three" class="dish-radio-label">THREES ONLY</label>
+      <input type="radio" name="dish-zones" id="z-paint" value="paint" class="dish-radio">
+      <label for="z-paint" class="dish-radio-label">PAINT / RIM</label>
+    </div>
+  </div>
+  <div class="dish-control-card">
+    <div class="dish-control-label">ACTIVE SPOTS</div>
+    <div class="dish-control-title">SIMULTANEOUS SPOTS</div>
+    <div class="dish-radio-group">
+      <input type="radio" name="dish-rotation" id="r-auto" value="auto" class="dish-radio" checked>
+      <label for="r-auto" class="dish-radio-label">AUTO (1–2)</label>
+      <input type="radio" name="dish-rotation" id="r-one" value="one" class="dish-radio">
+      <label for="r-one" class="dish-radio-label">1 SPOT</label>
+      <input type="radio" name="dish-rotation" id="r-two" value="two" class="dish-radio">
+      <label for="r-two" class="dish-radio-label">2 SPOTS</label>
+      <input type="radio" name="dish-rotation" id="r-three" value="three" class="dish-radio">
+      <label for="r-three" class="dish-radio-label">3 SPOTS</label>
+    </div>
+  </div>
+</div>
+
+<div class="dish-generate-row">
+  <button class="btn btn-blue" onclick="generateDishWorkout()">📡 GENERATE DR. DISH WORKOUT</button>
+</div>
+
+<div class="dish-workout-output" id="dish-output"></div>
+```
+
+  </div>
+</div>
+
+<script>
+// ══════════════════════════════════════════
+// DATA
+// ══════════════════════════════════════════
+
+const RIM_FINISHES = [
+  'Normal Scoop','High Pickup','Same Foot Layup','OG Reverse','Pinoy Reverse',
+  'Euro Step','Pro Hop','Power Dribble Finish','Floater','Runner','Swing Step Finish',
+  'Tuck Bump','Veer Bump','Two-Foot Floater','Inside Hand Scoop','Hook Shot',
+  'Pinoy Step','Wrap Finish','Spin Finish','Up and Under'
+];
+const MIDDY_FINISHES = [
+  'Hop Mini Fade','Half Spin Mini Fade','1-2 Mini Fade','Forward Pivot Hook',
+  'Forward Pivot Shot','BTB Step Back','Crossover Step Back','Punch Middy',
+  'Ball on Foot Step Back','Tween Hop Back','Pull Up J','Turnaround Fade'
+];
+const THREE_FINISHES = [
+  'Spot Up Catch & Shoot','Step Back Three','Pull Up Three','Corner Three',
+  'Wing Three','Top of Key Three','Drag Three','Momentum Three','Kick-out Three'
+];
+
+const CATEGORIES = [
+  {id:'bag',icon:'🥊',name:'Bag Work',desc:'Dribble moves & combos',skills:['Simple Cross','Blow By','Push Cross','Put in Jail','In-Out','In and Out','Iverson Cross','Tween Blow By','Tween Cross','BTB Speed Stop','Punch Speed Stop','Hesi Counter','1-2 Pull Up','Quick Pause with Step on Defense','Push Float','Cross Float','Tween Float','BTB Float','Wrap','Cross Step','Power Dribble','Power Dribble Spin','Bump','Veer Bump','Euro','Pinoy','In-Out Euro','Floater','Runner','Cross Jab','Swing Step High Pick Up','Swing Step Low Pick Up','Swing Step Tuck','Level Change','Speed Change','Rip and Go','Sweep and Go','Jab and Go','Slap Hands to Prevent Steals']},
+  {id:'power',icon:'💥',name:'Power Dribble',desc:'Power dribble counters',skills:['Bump to Floater','Bump to Layup','To Swing Step','To Laylah Spin','To Euro']},
+  {id:'prohop',icon:'🐇',name:'Pro Hop',desc:'Pro hop variations',skills:['To Floater','To Step Through','Pump Bump and Shoot','To Reverse Pivot','To Slide By']},
+  {id:'traffic',icon:'🚦',name:'Finish in Traffic',desc:'Contact finishes',skills:['Pinoy Step','Euro','Power Dribble Euro','Tuck Bump','Veer Bump','Swing Step High Pickup','Pro Hop']},
+  {id:'downhill',icon:'⬇️',name:'Downhill Attacks',desc:'Transition attacks',skills:['Euro','In-Out','In-Out Euro']},
+  {id:'space',icon:'🔭',name:'Create Space',desc:'Space-creating moves',skills:['Float','Quick Float','Bump to Step Back','Retreat to Attack','Spin and Seal']},
+  {id:'touch',icon:'🤌',name:'Touch Finishes',desc:'Soft touch finishes',skills:['Two Foot Floater Both Hands','Downhill Runner','Across the Lane Runner','Inside Hand Scoop','Outside the Lane Hook']},
+  {id:'layups',icon:'🏀',name:'Layups',desc:'Layup variations',skills:['Normal Scoop','High Pickup','Same Foot','OG Reverse','Pinoy Reverse']},
+  {id:'stride',icon:'🦶',name:'Stride Stop',desc:'Stride stop counters',skills:['To Forward Pivot Hook / Floater','To Forward Pivot Shot','To Forward Pivot Up and Under','To Forward / Reverse Layup']},
+  {id:'crossovers',icon:'✂️',name:'Crossovers',desc:'Cross variations',skills:['Iverson Cross','Tween Cross','BTB Cross','In/Out Cross','Scissor Cross','Float Crossover','Push Cross']},
+  {id:'cutoff',icon:'🚫',name:'Cut Off Counters',desc:'Beat the cut off',skills:['BTB and Go','Anchor Step and Go','Scissor and Go','Ball on Foot to Wrap and Go','Punch and Scissor']},
+  {id:'pressure',icon:'🔥',name:'Dealing With Pressure',desc:'Beat the press',skills:['Cross Step Pound to Scissor Attack','Retreat and Attack']},
+  {id:'live',icon:'⚡',name:'Live Dribble Attack',desc:'Off the catch attacks',skills:['Quick Blow By','Float and Go','Float and Cross','Double Tween']},
+  {id:'speed',icon:'🏎️',name:'Changing Speed',desc:'Tempo manipulation',skills:['Slow Ball on Foot to Fast Ball on Foot','Push Out Float and Cross','Slow Tween Float to Fast Cross Tween and Go']},
+  {id:'stops',icon:'🛑',name:'Speed Stops',desc:'Stop and go attacks',skills:['BTB Speed Stop','Punch']},
+  {id:'middy',icon:'🎯',name:'Short Middy Moves',desc:'10–15 feet pull-up game',skills:['Hop Mini Fade','Half Spin Mini Fade','1-2 Mini Fade','Ball on Foot Forward Pivot','BTB Step Back','Crossover Step Back','Punch Middy','Ball on Foot Step Back','Ball on Foot Tween Hop Back']}
+];
+
+const HANDLE_SECTIONS = [
+  {id:'foundation',name:'Foundation Handles',color:'var(--accent2)',handles:[
+    {name:'Pound Dribble',cues:'Strong base · Eyes up · Pound through the floor · 2 hands alternating',reps:'3×20 each hand'},
+    {name:'Figure 8',cues:'Low stance · No crossing yet · Around both legs · Maintain pressure',reps:'3×30 sec'},
+    {name:'One Hand Control',cues:'Dominant hand only · Eyes up · Waist level → knee level → ankle level',reps:'3×20 each height'},
+    {name:'Two Ball Alternating',cues:'Same time → then alternating → then staggered rhythm · Eyes forward',reps:'3×30 sec'},
+    {name:'Fingertip Taps',cues:'Full extension overhead · Down through legs · Builds hand strength and feel',reps:'3×20 trips'}
+  ]},
+  {id:'stationary',name:'Stationary Ball Skill',color:'var(--accent2)',handles:[
+    {name:'Single Leg Pound',cues:'One foot up · Drive into floor · Don\'t let ball control you',reps:'3×15 each side'},
+    {name:'Crossover Walk',cues:'In place first → then moving · Shoulder dip with every cross · Keep it tight',reps:'4×10 crosses'},
+    {name:'Between Legs (BL)',cues:'Front to back · Back to front · Quick hands · Stay low',reps:'4×20 BL'},
+    {name:'Behind Back (BTB)',cues:'Drive the ball around · Stay low · Don\'t let it drop · Rhythm first',reps:'3×15 each direction'},
+    {name:'In-Out',cues:'Sell the cross without going · Load the defense · Explode out',reps:'4×10 each hand'},
+    {name:'Tween (Between Legs Walk)',cues:'Step through each time · Low and tight · Build rhythm before speed',reps:'3×10 trips'}
+  ]},
+  {id:'movement',name:'Movement Handles',color:'var(--accent2)',handles:[
+    {name:'Cone Cross Series',cues:'5 cones · Cross at each · Change direction after each cone · Build to game speed',reps:'4×trips'},
+    {name:'Speed Dribble Full Court',cues:'Low to high finish · Ball ahead of body · Eyes on rim at end',reps:'4×full court'},
+    {name:'Hesitation Dribble',cues:'Sell the stop · Load weight back · Explode forward · Change tempo not just speed',reps:'4×10 hesis'},
+    {name:'Retreat and Re-attack',cues:'Push out → stop → gather → explode · Reset defender with every retreat',reps:'3×8 reps'},
+    {name:'Snake Dribble',cues:'Weave between cones · Low and under · Outside hand on each gate',reps:'4×trips'},
+    {name:'Chair Work Combo',cues:'Attack chair → pull up or cross · Simulate defender reads · Add counter each round',reps:'3×5 combos'}
+  ]},
+  {id:'combo',name:'Phil Handy Combos',color:'var(--accent2)',handles:[
+    {name:'Cross → BTB → Go',cues:'Full speed · Cross to set up BTB · BTB as separation move · Finish strong',reps:'4×5 each side'},
+    {name:'In-Out → Tween → Blow By',cues:'3-move chain · Each move must be convincing · Game-speed finish',reps:'4×5 each side'},
+    {name:'Pound → Hesi → Cross Attack',cues:'Pound to load → sell hesi → attack off the cross · Control tempo',reps:'3×6 each side'},
+    {name:'Retreat → Float → Go',cues:'Push back → let it float out front → explode past defender',reps:'4×5 each side'},
+    {name:'2-Ball Alternating → Drop to 1 → Attack',cues:'2 ball rhythm → drop left → cross right → finish',reps:'3×5 combos'},
+    {name:'Iverson Cross → Level Change → Blow By',cues:'High cross → drop body level → burst through · Shoulders must change',reps:'4×5 each side'}
+  ]}
+];
+
+// ══════════════════════════════════════════
+// CATEGORY MODES
+// start → Power Dribble, Pro Hop, Finish in Traffic, Touch Finishes, Layups
+// spot  → Short Middy Moves
+// finish → everything else
+// ══════════════════════════════════════════
+const START_CATS = new Set(["power","prohop","traffic","touch","layups"]);
+const SPOT_CATS  = new Set(["middy"]);
+
+const START_OPTIONS = {
+  power:   ["Pound Dribble","Cross","Hesi","BTB","In-Out","Tween"],
+  prohop:  ["Live Dribble Attack","Catch and Go","Drive from Wing","Drive from Elbow","One Dribble","Pull Back and Attack"],
+  traffic: ["Pound into Paint","Drive Right","Drive Left","Elbow Attack","Baseline Drive","Middle Drive"],
+  touch:   ["Catch in Paint","Drive to Paint","Drop Step Entry","Post Feed","Baseline Drive","Wing Drive"],
+  layups:  ["Left Side Approach","Right Side Approach","Middle Drive","Baseline Drive","Catch at Block","Speed Dribble"],
+};
+
+const MIDDY_SPOTS = [
+  "Right Elbow","Left Elbow","Right Wing Mid","Left Wing Mid",
+  "Nail (FT Line)","Right Short Corner","Left Short Corner",
+  "Right Baseline Mid","Left Baseline Mid","Top of Key Mid",
+];
+
+// ══════════════════════════════════════════
+// STATE
+// mode finish: { catId, skill, mode, finish, finishName }
+// mode start:  { catId, skill, mode, startName }
+// mode spot:   { catId, skill, mode, spotName }
+// ══════════════════════════════════════════
+let selected = {};
+let activePicker = null; // tracks which inline picker is open
+let activeCat = "all";
+let selectedHandles = new Set();
+let philWorkout = [];
+let workoutOrder = [];
+
+function getKey(catId, skill){ return catId+"||" +skill; }
+function getMode(catId){ return START_CATS.has(catId)?"start":SPOT_CATS.has(catId)?"spot":"finish"; }
+
+// ══════════════════════════════════════════
+// TAB ROUTING
+// ══════════════════════════════════════════
+function showTab(tab){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('page-'+tab).classList.add('active');
+  event.currentTarget.classList.add('active');
+  if(tab==='workout') renderFullWorkout();
+}
+
+// ══════════════════════════════════════════
+// BAG WORK
+// ══════════════════════════════════════════
+function renderBagSidebar(){
+  const sb = document.getElementById('bag-sidebar');
+  const total = CATEGORIES.reduce((a,c)=>a+c.skills.length,0);
+  let h = `<div class="sidebar-label">CATEGORIES</div>`;
+  h += `<button class="cat-btn active" data-cat="all" onclick="selectCat('all',this)"><span class="ci">📋</span><div><div class="cn">All Skills</div><div class="cc">${total} moves</div></div></button>`;
+  h += `<div class="sidebar-divider"></div>`;
+  CATEGORIES.forEach(c=>{
+    h += `<button class="cat-btn" data-cat="${c.id}" onclick="selectCat('${c.id}',this)"><span class="ci">${c.icon}</span><div><div class="cn">${c.name}</div><div class="cc">${c.skills.length} moves</div></div></button>`;
+  });
+  sb.innerHTML = h;
+}
+
+function selectCat(id, btn){
+  activeCat = id;
+  document.querySelectorAll('#bag-sidebar .cat-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+  renderBagContent();
+}
+
+function renderBagContent(){
+  const content = document.getElementById('bag-content');
+  const cats = activeCat==='all' ? CATEGORIES : CATEGORIES.filter(c=>c.id===activeCat);
+  const total = cats.reduce((a,c)=>a+c.skills.length,0);
+  const selCount = cats.reduce((a,c)=>a+c.skills.filter(s=>selected[getKey(c.id,s)]).length,0);
+
+  const title = activeCat==='all' ? 'All Skills' : cats[0]?.name || '';
+  let h = `<div class="sec-header">
+    <div><div class="sec-title">${title}</div><div class="sec-sub">${total} MOVES · ${selCount} SELECTED</div></div>
+    <div class="btn-row">
+      <button class="btn btn-ghost btn-sm" onclick="deselAllCat()">DESELECT ALL</button>
+      <button class="btn btn-ghost btn-sm" onclick="selAllCat()">SELECT ALL</button>
+      <button class="btn btn-primary btn-sm" onclick="showTab('workout');renderFullWorkout()">VIEW WORKOUT (${Object.keys(selected).length})</button>
+    </div>
+  </div>`;
+
+  if(activeCat==='all'){
+    h += `<div class="all-cols">`;
+    CATEGORIES.forEach(cat=>{
+      const sc = cat.skills.filter(s=>selected[getKey(cat.id,s)]).length;
+      h += `<div class="all-block"><div class="all-block-hdr"><span class="all-block-icon">${cat.icon}</span><span class="all-block-title">${cat.name}</span><span class="all-block-count">${sc}/${cat.skills.length}</span></div>`;
+      cat.skills.forEach(skill=>{
+        const key = getKey(cat.id,skill);
+        const isSel = !!selected[key];
+        h += `<div class="all-row ${isSel?'selected':''}" onclick="toggleSkill('${cat.id}','${esc(skill)}')"><span>${skill}</span><span class="all-check">✓</span></div>`;
+      });
+      h += `</div>`;
+    });
+    h += `</div>`;
+  } else {
+    const cat = cats[0];
+    if(!cat){ content.innerHTML = h; return; }
+    const catMode = getMode(cat.id);
+    h += `<div class="skills-grid">`;
+    cat.skills.forEach(skill=>{
+      const key = getKey(cat.id,skill);
+      const entry = selected[key];
+      const isSel = !!entry;
+      h += `<div class="skill-card ${isSel?'selected':''}" id="card-${key}">
+        <div class="skill-name" onclick="toggleSkill('${cat.id}','${esc(skill)}')">${skill}</div>
+        <div class="skill-tag">${cat.icon} ${cat.name}</div>`;
+      if(isSel){
+        if(catMode==='finish'){
+          const finish = entry.finish||null;
+          const fname = entry.finishName;
+          h += `<div class="finish-bar">
+            <span class="finish-chip ${finish==='rim'?'active-rim':''}" onclick="setFinish('${key}','rim')">🏀 RIM</span>
+            <span class="finish-chip ${finish==='middy'?'active-middy':''}" onclick="setFinish('${key}','middy')">📍 MIDDY</span>
+            <span class="finish-chip ${finish==='three'?'active-three':''}" onclick="setFinish('${key}','three')">🎯 THREE</span>
+          </div>`;
+          if(finish){
+            const pickerKey = '${key}__finish__'+finish;
+            const isPickerOpen = activePicker === pickerKey;
+            const pool = finish==='rim'?RIM_FINISHES:finish==='middy'?MIDDY_FINISHES:THREE_FINISHES;
+            const dotClass = finish==='rim'?'dot-rim':finish==='middy'?'dot-mid':'dot-three';
+            h += `<div style="margin-top:6px;display:flex;align-items:center;gap:5px;flex-wrap:wrap;">
+              <span style="font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);">FINISH:</span>
+              <span class="finish-badge badge-${finish}">${fname||'—'}</span>
+              <button class="finish-rand ${isPickerOpen?'active-middy':''}" onclick="pickFinish('${key}','${finish}')">${isPickerOpen?'CLOSE':'SELECT'}</button>
+              <button class="finish-rand" onclick="randomFinish('${key}','${finish}')">RANDOM</button>
+            </div>`;
+            if(isPickerOpen){
+              h += `<div class="inline-picker">`;
+              pool.forEach((f,pi)=>{
+                const isPicked = fname===f;
+                h += `<div class="picker-item ${isPicked?'picked':''}" onclick="applyFinish('${key}','${finish}','${f.replace(/'/g,"\\'")}')">
+                  <span class="picker-dot ${dotClass}"></span>${f}
+                </div>`;
+              });
+              h += `</div>`;
+            }
+          }
+        } else if(catMode==='start'){
+          const sname = entry.startName;
+          const startPickerKey = '${key}__start__${cat.id}';
+          const isStartOpen = activePicker === startPickerKey;
+          const startPool = START_OPTIONS['${cat.id}'] || [];
+          h += `<div style="margin-top:7px;">
+            <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--accent2);letter-spacing:1px;margin-bottom:5px;">BEGIN WITH</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+              <span class="finish-badge badge-middy">${sname||'—'}</span>
+              <button class="finish-rand ${isStartOpen?'active-middy':''}" onclick="pickStart('${key}','${cat.id}')">${isStartOpen?'CLOSE':'SELECT'}</button>
+              <button class="finish-rand" onclick="randomStart('${key}','${cat.id}')">RANDOM</button>
+            </div>
+          </div>`;
+          if(isStartOpen){
+            h += `<div class="inline-picker">`;
+            startPool.forEach(f=>{
+              const isPicked = sname===f;
+              h += `<div class="picker-item ${isPicked?'picked-orange':''}" onclick="applyStart('${key}','${f.replace(/'/g,"\\'")}')">
+                <span class="picker-dot dot-start"></span>${f}
+              </div>`;
+            });
+            h += `</div>`;
+          }
+        } else if(catMode==='spot'){
+          const spotName = entry.spotName;
+          h += `<div style="margin-top:7px;">
+            <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--accent3);letter-spacing:1px;margin-bottom:5px;">MIDDY SPOT</div>
+            <div style="display:flex;gap:5px;flex-wrap:wrap;align-items:center;">
+              <span class="finish-badge badge-three">${spotName||'—'}</span>
+              <button class="finish-rand" onclick="randomSpot('${key}')">RANDOM SPOT</button>
+            </div>
+          </div>`;
+        }
+      }
+      h += `</div>`;
+    });
+    h += `</div>`;
+  }
+  content.innerHTML = h;
+  updatePip();
+}
+
+function esc(s){ return s.replace(/'/g,"\\'"); }
+
+function toggleSkill(catId, skill){
+  const key = getKey(catId,skill);
+  if(selected[key]){ delete selected[key]; workoutOrder = workoutOrder.filter(k=>k!==key); }
+  else {
+    const mode = getMode(catId);
+    selected[key] = {catId, skill, mode, finish:null, finishName:null, startName:null, spotName:null};
+    workoutOrder.push(key);
+  }
+  renderBagContent();
+}
+
+function setFinish(key, type){
+  if(!selected[key]) return;
+  if(selected[key].finish === type){ selected[key].finish = null; selected[key].finishName = null; }
+  else { selected[key].finish = type; selected[key].finishName = null; }
+  activePicker = null;
+  renderBagContent();
+}
+
+function pickFinish(key, type){
+  if(!selected[key]) return;
+  // toggle inline picker
+  if(activePicker === key+'__finish__'+type){ activePicker = null; renderBagContent(); return; }
+  activePicker = key+'__finish__'+type;
+  renderBagContent();
+}
+
+function applyFinish(key, type, name){
+  if(!selected[key]) return;
+  selected[key].finish = type;
+  selected[key].finishName = name;
+  activePicker = null;
+  renderBagContent();
+}
+
+function applyStart(key, name){
+  if(!selected[key]) return;
+  selected[key].startName = name;
+  activePicker = null;
+  renderBagContent();
+}
+
+function randomFinish(key, type){
+  if(!selected[key]) return;
+  const pool = type==='rim'?RIM_FINISHES:type==='middy'?MIDDY_FINISHES:THREE_FINISHES;
+  selected[key].finishName = pool[Math.floor(Math.random()*pool.length)];
+  renderBagContent();
+}
+
+function pickStart(key, catId){
+  if(!selected[key]) return;
+  if(activePicker === key+'__start__'+catId){ activePicker = null; renderBagContent(); return; }
+  activePicker = key+'__start__'+catId;
+  renderBagContent();
+}
+
+function randomStart(key, catId){
+  if(!selected[key]) return;
+  const pool = START_OPTIONS[catId] || [];
+  if(!pool.length) return;
+  selected[key].startName = pool[Math.floor(Math.random()*pool.length)];
+  renderBagContent();
+}
+
+function randomSpot(key){
+  if(!selected[key]) return;
+  const current = selected[key].spotName;
+  const available = MIDDY_SPOTS.filter(s => s !== current);
+  selected[key].spotName = available[Math.floor(Math.random()*available.length)];
+  renderBagContent();
+}
+
+function selAllCat(){
+  const cats = activeCat==='all'?CATEGORIES:CATEGORIES.filter(c=>c.id===activeCat);
+  cats.forEach(cat=>{
+    const mode = getMode(cat.id);
+    cat.skills.forEach(s=>{
+      const k=getKey(cat.id,s);
+      if(!selected[k]){selected[k]={catId:cat.id,skill:s,mode,finish:null,finishName:null,startName:null,spotName:null};workoutOrder.push(k);}
+    });
+  });
+  renderBagContent();
+}
+
+function deselAllCat(){
+  const cats = activeCat==='all'?CATEGORIES:CATEGORIES.filter(c=>c.id===activeCat);
+  cats.forEach(cat=>cat.skills.forEach(s=>{const k=getKey(cat.id,s);delete selected[k];workoutOrder=workoutOrder.filter(x=>x!==k);}));
+  renderBagContent();
+}
+
+function updatePip(){
+  const n = Object.keys(selected).length;
+  const pip = document.getElementById('pip-bag');
+  const wpip = document.getElementById('pip-workout');
+  if(pip) pip.style.display = n>0?'inline-block':'none';
+  if(wpip) wpip.style.display = n>0?'inline-block':'none';
+}
+
+// ══════════════════════════════════════════
+// MY WORKOUT
+// ══════════════════════════════════════════
+function renderFullWorkout(){
+  const list = document.getElementById('full-workout-list');
+  const sub = document.getElementById('workout-sub');
+  const total = workoutOrder.length + (philWorkout.length>0?philWorkout.length:0);
+  const allItems = [...workoutOrder];
+
+  sub.textContent = `${allItems.length} MOVES${philWorkout.length>0?' + '+philWorkout.length+' HANDLE DRILLS':''} · YOUR SESSION`;
+
+  if(allItems.length===0 && philWorkout.length===0){
+    list.innerHTML = `<div style="text-align:center;padding:60px 20px;color:var(--muted);"><div style="font-size:40px;margin-bottom:12px;">📋</div><div style="font-family:'Space Mono',monospace;font-size:10px;">SELECT MOVES FROM BAG WORK OR HANDLES</div></div>`;
+    return;
+  }
+
+  let h = '';
+  allItems.forEach((key,i)=>{
+    const entry = selected[key];
+    if(!entry) return;
+    const cat = CATEGORIES.find(c=>c.id===entry.catId);
+    const mode = entry.mode || getMode(entry.catId);
+    h += `<div class="w-item">
+      <div class="w-item-top">
+        <span class="w-num">${i+1}</span>
+        <div class="w-info">
+          <div class="w-name">${entry.skill}</div>
+          <div class="w-meta">${cat?cat.icon+' '+cat.name:''}</div>
+        </div>
+        <button class="w-rm" onclick="removeWorkoutItem('${key}')">✕</button>
+      </div>`;
+
+    if(mode === 'finish'){
+      const finish = entry.finish;
+      const fname = entry.finishName;
+      if(finish){
+        h += `<div class="w-finish-row">
+          <span class="w-finish-label">FINISH →</span>
+          <span class="finish-badge badge-${finish}">${finish.toUpperCase()}</span>
+          ${fname?`<span class="finish-badge badge-${finish}" style="font-style:italic;">${fname}</span>`:''}
+          <button class="finish-rand" onclick="randomWorkoutFinish('${key}','${finish}')">RANDOM</button>
+        </div>`;
+      } else {
+        h += `<div class="w-finish-row">
+          <span class="w-finish-label">FINISH →</span>
+          <button class="tog" onclick="setFinishWorkout('${key}','rim')">🏀 RIM</button>
+          <button class="tog" onclick="setFinishWorkout('${key}','middy')">📍 MIDDY</button>
+          <button class="tog" onclick="setFinishWorkout('${key}','three')">🎯 THREE</button>
+        </div>`;
+      }
+
+    } else if(mode === 'start'){
+      const sname = entry.startName;
+      h += `<div class="w-finish-row">
+        <span class="w-finish-label" style="color:var(--accent2);">BEGIN WITH →</span>
+        <span class="finish-badge badge-middy">${sname||'—'}</span>
+        <button class="finish-rand" onclick="randomWorkoutStart('${key}')">RANDOM</button>
+      </div>`;
+
+    } else if(mode === 'spot'){
+      const spotName = entry.spotName;
+      h += `<div class="w-finish-row">
+        <span class="w-finish-label" style="color:var(--accent3);">SPOT →</span>
+        <span class="finish-badge badge-three">${spotName||'—'}</span>
+        <button class="finish-rand" onclick="randomWorkoutSpot('${key}')">RANDOM SPOT</button>
+      </div>`;
+    }
+
+    h += `</div>`;
+  });
+
+  if(philWorkout.length>0){
+    h += `<div style="font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent2);margin:20px 0 10px;border-top:1px solid var(--border);padding-top:16px;">HANDLE WORK</div>`;
+    philWorkout.forEach((step,i)=>{
+      h += `<div class="phil-workout-item">
+        <div style="display:flex;align-items:center;gap:10px;">
+          <span class="phil-step-num">${allItems.length+i+1}</span>
+          <div><div class="phil-step-name">${step.name}</div><div class="phil-step-cues">${step.cues}</div><div class="phil-reps">${step.reps}</div></div>
+        </div>
+      </div>`;
+    });
+  }
+
+  list.innerHTML = h;
+}
+
+function setFinishWorkout(key, type){
+  if(!selected[key]) return;
+  selected[key].finish = type;
+  selected[key].finishName = null;
+  renderFullWorkout();
+}
+
+function randomWorkoutFinish(key, type){
+  if(!selected[key]) return;
+  let pool = type==='rim'?RIM_FINISHES:type==='middy'?MIDDY_FINISHES:THREE_FINISHES;
+  selected[key].finishName = pool[Math.floor(Math.random()*pool.length)];
+  renderFullWorkout();
+}
+
+function randomWorkoutStart(key){
+  if(!selected[key]) return;
+  const pool = START_OPTIONS[selected[key].catId] || [];
+  if(!pool.length) return;
+  selected[key].startName = pool[Math.floor(Math.random()*pool.length)];
+  renderFullWorkout();
+}
+
+function randomWorkoutSpot(key){
+  if(!selected[key]) return;
+  const current = selected[key].spotName;
+  const available = MIDDY_SPOTS.filter(s => s !== current);
+  selected[key].spotName = available[Math.floor(Math.random()*available.length)];
+  renderFullWorkout();
+}
+
+function removeWorkoutItem(key){
+  delete selected[key];
+  workoutOrder = workoutOrder.filter(k=>k!==key);
+  renderFullWorkout();
+  renderBagContent();
+  updatePip();
+}
+
+function shuffleWorkout(){
+  for(let i=workoutOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[workoutOrder[i],workoutOrder[j]]=[workoutOrder[j],workoutOrder[i]];}
+  philWorkout.sort(()=>Math.random()-.5);
+  renderFullWorkout();
+}
+
+function clearWorkout(){
+  selected = {}; workoutOrder = []; philWorkout = [];
+  renderFullWorkout(); renderBagContent(); updatePip();
+}
+
+function printWorkout(){
+  const lines = workoutOrder.map((key,i)=>{
+    const e = selected[key];
+    if(!e) return '';
+    const cat = CATEGORIES.find(c=>c.id===e.catId);
+    let line = `${i+1}. ${e.skill} [${cat?cat.name:''}]`;
+    if(e.finish) line += ` → ${e.finish.toUpperCase()}${e.finishName?' ('+e.finishName+')':''}`;
+    return line;
+  }).filter(Boolean);
+  const pLines = philWorkout.map((s,i)=>`${workoutOrder.length+i+1}. HANDLE: ${s.name} — ${s.reps}`);
+  const w = window.open('','_blank');
+  w.document.write(`<html><head><title>THE LAB — My Workout</title><style>body{font-family:monospace;padding:32px;max-width:600px;background:#0d0a14;color:#fff;}h1{font-size:28px;letter-spacing:4px;color:#c084fc;margin-bottom:6px;}h2{font-size:18px;color:#c084fc;margin:20px 0 10px;}h3{font-size:11px;letter-spacing:3px;color:#6b5a85;margin-bottom:20px;font-weight:normal;}li{padding:7px 0;border-bottom:1px solid #2a2040;font-size:14px;}ul{list-style:none;padding:0;}</style></head><body><h1>THE LAB</h1><h3>INTENTIONAL REPS. UNDENIABLE RESULTS.</h3><ul>${lines.map(l=>`<li>${l}</li>`).join('')}</ul>${pLines.length?'<h2>HANDLE WORK</h2><ul>'+pLines.map(l=>`<li>${l}</li>`).join('')+'</ul>':''}</body></html>`);
+
+w.document.close(); w.print();
+}
+
+// ══════════════════════════════════════════
+// HANDLES PAGE
+// ══════════════════════════════════════════
+function renderHandles(){
+const grid = document.getElementById(‘handles-grid’);
+let h = ‘’;
+HANDLE_SECTIONS.forEach(section=>{
+h += `<div class="handle-section"><div class="handle-section-title">${section.name}</div><div class="skills-grid">`;
+section.handles.forEach(handle=>{
+const isSel = selectedHandles.has(section.id+’||’+handle.name);
+h += `<div class="skill-card ${isSel?'selected':''}" onclick="toggleHandle('${section.id}','${esc(handle.name)}')"> <div class="skill-name">${handle.name}</div> <div class="skill-tag" style="color:var(--accent2);">${handle.reps}</div> ${isSel?'':''} </div>`;
+});
+h += `</div></div>`;
+});
+grid.innerHTML = h;
+}
+
+function toggleHandle(secId, name){
+const key = secId+’||’+name;
+if(selectedHandles.has(key)) selectedHandles.delete(key);
+else selectedHandles.add(key);
+renderHandles();
+}
+
+function generatePhilWorkout(){
+const output = document.getElementById(‘phil-output’);
+let drills = [];
+
+// Collect selected or use a default set if nothing selected
+if(selectedHandles.size===0){
+// Default Phil Handy style session
+drills = [
+{name:‘Pound Dribble Warm-Up’,cues:‘2 hands alternating · Eyes up · Full floor pounding · Build intensity each set’,reps:‘3×20 each hand’},
+{name:‘Figure 8 → Cross Combo’,cues:‘Figure 8 first → then add cross at the end · Move with the ball → don't let it sit’,reps:‘4×30 sec’},
+{name:‘Iverson Cross Walking’,cues:‘Shoulder into every cross · Eyes on target · Walk → jog → full speed’,reps:‘4×full court’},
+{name:‘In-Out → Tween → Blow By’,cues:‘Sell every move · Don't rush the combo · Finish at the rim or pull up’,reps:‘4×5 each side’},
+{name:‘BTB Speed Stop × Cross Attack’,cues:‘Stop with BTB → load → explode across · Change of pace is the weapon’,reps:‘4×6 each side’},
+{name:‘Retreat and Re-attack’,cues:‘Push out 3 dribbles → stop → gather → burst · Reset the defender mentally’,reps:‘3×8 reps’},
+{name:‘Chair Work — 3-Move Combo’,cues:‘Attack chair → hesi → cross or BTB → finish · Simulate game reads’,reps:‘3×5 combos each side’},
+{name:‘Game Speed Full Court’,cues:‘Everything learned today at full speed · Make reads at the rim · Eyes up all the way’,reps:‘4×full court’}
+];
+} else {
+// Build from selected handles
+const allHandles = HANDLE_SECTIONS.flatMap(s=>s.handles.map(h=>({…h,secId:s.id})));
+const chosen = allHandles.filter(h=>selectedHandles.has(h.secId+’||’+h.name));
+
+```
+// Structure: foundation → stationary → movement → combo
+const order = ['foundation','stationary','movement','combo'];
+order.forEach(sid=>{
+  const section = HANDLE_SECTIONS.find(s=>s.id===sid);
+  const items = chosen.filter(h=>h.secId===sid);
+  items.forEach(h=>drills.push({name:h.name,cues:h.cues,reps:h.reps}));
+});
+
+// Add combo finish
+const comboFinishers = [
+  {name:'Game Speed Full Court',cues:'String everything together at game speed · Make reads · Eyes on rim all the way',reps:'4×full court'},
+  {name:'Chair Work Consolidation',cues:'Take your 2 best moves today and chain them at game speed off a chair',reps:'3×5 each side'}
+];
+comboFinishers.forEach(c=>drills.push(c));
+```
+
+}
+
+philWorkout = drills;
+
+let h = `<div class="phil-builder"> <div class="phil-header">⚡ PHIL HANDY HANDLE WORKOUT</div> <div class="phil-sub">PROGRESSIVE · STATIONARY → MOVEMENT → GAME SPEED · ${drills.length} DRILLS</div>`;
+drills.forEach((d,i)=>{
+h += `<div class="phil-workout-item"> <div style="display:flex;align-items:flex-start;gap:10px;"> <span class="phil-step-num">${i+1}</span> <div style="flex:1;"> <div class="phil-step-name">${d.name}</div> <div class="phil-step-cues">${d.cues}</div> <span class="phil-reps">${d.reps}</span> </div> </div> </div>`;
+});
+h += `<div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-orange" onclick="generatePhilWorkout()">↺ REGENERATE</button>
+<button class="btn btn-ghost" onclick="addHandlesToWorkout()">+ ADD TO MY WORKOUT</button>
+
+  </div></div>`;
+  output.innerHTML = h;
+}
+
+function addHandlesToWorkout(){
+if(philWorkout.length===0) generatePhilWorkout();
+showTab(‘workout’);
+renderFullWorkout();
+}
+
+// ══════════════════════════════════════════
+// DR. DISH GENERATOR
+// ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// DR. DISH — SPOTS-BASED SYSTEM
+// Every athlete is ALWAYS on the machine.
+// 1–2 spots active simultaneously (3 if needed for large groups).
+// Athletes rotate through spots; nobody sits out.
+// ══════════════════════════════════════════
+
+// SPOT DEFINITIONS — each spot has a position on the floor,
+// a machine delivery angle, and compatible drill types.
+const SPOTS = {
+// Shooting spots
+rightCorner:  { label:‘Right Corner’,     zone:‘three’, angle:‘Corner (R)’, icon:‘📐’ },
+leftCorner:   { label:‘Left Corner’,      zone:‘three’, angle:‘Corner (L)’, icon:‘📐’ },
+rightWing:    { label:‘Right Wing’,       zone:‘three’, angle:‘Wing (R)’,   icon:‘🔼’ },
+leftWing:     { label:‘Left Wing’,        zone:‘three’, angle:‘Wing (L)’,   icon:‘🔼’ },
+topKey:       { label:‘Top of Key’,       zone:‘three’, angle:‘Top’,        icon:‘🔝’ },
+rightElbow:   { label:‘Right Elbow’,      zone:‘mid’,   angle:‘Elbow (R)’,  icon:‘📍’ },
+leftElbow:    { label:‘Left Elbow’,       zone:‘mid’,   angle:‘Elbow (L)’,  icon:‘📍’ },
+nail:         { label:‘Nail (Free Throw)’,zone:‘mid’,   angle:‘Nail’,       icon:‘🎯’ },
+shortCornerR: { label:‘Short Corner (R)’, zone:‘mid’,   angle:‘Baseline (R)’,icon:‘📌’ },
+shortCornerL: { label:‘Short Corner (L)’, zone:‘mid’,   angle:‘Baseline (L)’,icon:‘📌’ },
+// Finishing spots
+rightBlock:   { label:‘Right Block’,      zone:‘paint’, angle:‘Block (R)’,  icon:‘🟥’ },
+leftBlock:    { label:‘Left Block’,       zone:‘paint’, angle:‘Block (L)’,  icon:‘🟥’ },
+rightDrive:   { label:‘Right Drive Lane’, zone:‘paint’, angle:‘Wing (R)’,   icon:‘➡️’ },
+leftDrive:    { label:‘Left Drive Lane’,  zone:‘paint’, angle:‘Wing (L)’,   icon:‘⬅️’ },
+elbowDrive:   { label:‘Elbow Drive’,      zone:‘paint’, angle:‘Elbow’,      icon:‘⬇️’ },
+};
+
+// DRILL TEMPLATES — each drill defines:
+//   spots: which spots are active simultaneously (1–3)
+//   rotation: how athletes cycle through spots
+//   reps/cues per spot
+const DRILL_LIBRARY = {
+
+shooting: [
+{
+name: ‘Corner-to-Corner Rotation’,
+type: ‘catch’,
+spots: [‘rightCorner’,‘leftCorner’],
+machineDelivery: ‘Alternates between corners each rep’,
+rotationNote: ‘Athlete shoots → retrieves → passes to next → goes to back of opposite line’,
+perSpot: {
+rightCorner: { task:‘Catch & Shoot — Right Corner’, cues:‘Step into shot off catch · Hold follow-through · Sprint off after make · Rotate left line’, finish:‘Corner Three’ },
+leftCorner:  { task:‘Catch & Shoot — Left Corner’,  cues:‘Mirror footwork · Square shoulders on catch · Hold follow-through · Rotate right line’, finish:‘Corner Three’ },
+}
+},
+{
+name: ‘Wing Catch & Shoot’,
+type: ‘catch’,
+spots: [‘rightWing’,‘leftWing’],
+machineDelivery: ‘Alternates wings on a 2-second timer’,
+rotationNote: ‘Shoot → retrieve → feed ball back to machine line → rotate to other wing’,
+perSpot: {
+rightWing: { task:‘Right Wing Three’, cues:‘Feet ready before catch · Inside pivot on late pass · Balanced release · High arc’, finish:‘Wing Three’ },
+leftWing:  { task:‘Left Wing Three’,  cues:‘Mirror footwork · No drifting on the catch · Eyes on target early · Follow through’, finish:‘Wing Three’ },
+}
+},
+{
+name: ‘Elbow Mid-Range Rotation’,
+type: ‘catch’,
+spots: [‘rightElbow’,‘leftElbow’],
+machineDelivery: ‘Delivers to elbows alternating’,
+rotationNote: ‘Catch-shoot-rotate · One line feeds both elbows · Athlete goes to back of opposite elbow line after shooting’,
+perSpot: {
+rightElbow: { task:‘Right Elbow Pull-Up’, cues:‘Flat feet on catch · Slight forward lean · 1-2 rhythm · No fading’, finish:‘Elbow Mid’ },
+leftElbow:  { task:‘Left Elbow Pull-Up’,  cues:‘Same form both sides · Don't let weak hand dominate · Compact motion’, finish:‘Elbow Mid’ },
+}
+},
+{
+name: ‘Three-Spot Arc Rotation’,
+type: ‘catch’,
+spots: [‘rightCorner’,‘topKey’,‘leftCorner’],
+machineDelivery: ‘Cycles through all 3 spots in order — corner → top → corner’,
+rotationNote: ‘Three lines. Machine delivers to each spot in sequence. After shooting, sprint to back of next spot's line (rotate clockwise).’,
+perSpot: {
+rightCorner: { task:‘Right Corner Three’, cues:‘Baseline footwork · Turn into the shot · Don't fade baseline’, finish:‘Corner Three’ },
+topKey:      { task:‘Top of Key Three’,   cues:‘Square up · Full extension · Don't rush — top of key has more time’, finish:‘Top Three’ },
+leftCorner:  { task:‘Left Corner Three’,  cues:‘Step into shot · Catch with hands ready · Strong off both feet’, finish:‘Corner Three’ },
+}
+},
+{
+name: ‘Wing-Corner Combo’,
+type: ‘catch’,
+spots: [‘rightWing’,‘rightCorner’],
+machineDelivery: ‘Alternates: Wing → Corner → Wing → Corner’,
+rotationNote: ‘Two lines on right side. Shoot → retrieve → rotate to back of other line.’,
+perSpot: {
+rightWing:   { task:‘Wing Catch & Shoot’, cues:‘Read the machine pass · Hands up early · Set feet in rhythm’, finish:‘Wing Three’ },
+rightCorner: { task:‘Corner Catch & Shoot’, cues:‘Baseline footwork · Toes to the corner · Strong hands on catch’, finish:‘Corner Three’ },
+}
+},
+{
+name: ‘Free Throw → Spot Up’,
+type: ‘catch’,
+spots: [‘nail’,‘rightWing’],
+machineDelivery: ‘Nail delivery first (free throw) → then wing on a sequence’,
+rotationNote: ‘Athlete 1 at nail, Athlete 2+ at wing. After FT make, sprint to wing line. Wing shooter rotates to nail.’,
+perSpot: {
+nail:      { task:‘Free Throw (Nail)’, cues:‘Full routine every rep · Bounce routine → breathe → shoot · No rushing’, finish:‘Free Throw’ },
+rightWing: { task:‘Spot Up — Right Wing’, cues:‘Transition catch — feet moving into the shot · No standing flat-footed’, finish:‘Wing Three’ },
+}
+},
+],
+
+finishing: [
+{
+name: ‘Block-to-Block Layup Wave’,
+type: ‘finish’,
+spots: [‘rightBlock’,‘leftBlock’],
+machineDelivery: ‘Alternates block passes every rep — 1-second gap between athletes’,
+rotationNote: ‘Two lines at half-court. Sprint → receive → finish → rebound own → outlet → back of opposite line.’,
+perSpot: {
+rightBlock: { task:‘Right Block Finish’, cues:‘Sprint full speed · Gather late · Use glass · High off board · Don't float under basket’, finish:‘Right Block Layup / Hook’ },
+leftBlock:  { task:‘Left Block Finish’,  cues:‘Left hand strong · Same foot takeoff · High soft touch · Don't reach across body’, finish:‘Left Block Layup / Hook’ },
+}
+},
+{
+name: ‘Drive Lane Floater Circuit’,
+type: ‘finish’,
+spots: [‘rightDrive’,‘leftDrive’],
+machineDelivery: ‘Pass delivered on drive angle as athlete attacks — timed to catch-and-go’,
+rotationNote: ‘Two lines at top of key. Drive angle → gather → float → sprint to back of opposite line.’,
+perSpot: {
+rightDrive: { task:‘Right Side Floater’, cues:‘Attack at full speed · One hard dribble if needed · Gather early · Float over help with touch’, finish:‘Floater (R hand)’ },
+leftDrive:  { task:‘Left Side Floater’,  cues:‘Left-hand float · Don't sling it · Controlled release · Extend fully’, finish:‘Floater (L hand)’ },
+}
+},
+{
+name: ‘Euro Step Wave’,
+type: ‘finish’,
+spots: [‘rightDrive’,‘leftDrive’],
+machineDelivery: ‘Wing pass on angle as athlete drives — mimics live dribble attack’,
+rotationNote: ‘One line at top. Attack right → euro left → reset. Next athlete goes opposite direction. Alternate each rep.’,
+perSpot: {
+rightDrive: { task:‘Euro — Attack Right, Step Left’, cues:‘Two-foot gather · Explosive first step · Step through the help · Finish soft off glass’, finish:‘Euro Step (L finish)’ },
+leftDrive:  { task:‘Euro — Attack Left, Step Right’, cues:‘Mirror footwork · Don't gather too early · Drive first THEN step · Strong hands’, finish:‘Euro Step (R finish)’ },
+}
+},
+{
+name: ‘Pro Hop Circuit’,
+type: ‘finish’,
+spots: [‘elbowDrive’,‘rightDrive’],
+machineDelivery: ‘Elbow/angle pass delivered on the drive — athlete catches in stride’,
+rotationNote: ‘Two lines. Elbow drive → pro hop toward block → finish. Sprint to back of other line.’,
+perSpot: {
+elbowDrive: { task:‘Elbow Drive → Pro Hop’,  cues:‘Attack downhill · Two-foot gather off dribble or catch · Land balanced · Finish strong or soft’, finish:‘Pro Hop Layup or Floater’ },
+rightDrive: { task:‘Right Drive → Pro Hop’,  cues:‘Right-side attack → hop toward left block · Eyes on rim · Strong two-foot land’, finish:‘Pro Hop (L side)’ },
+}
+},
+{
+name: ‘Swing Step Pickup’,
+type: ‘finish’,
+spots: [‘rightDrive’,‘leftBlock’],
+machineDelivery: ‘Pass delivered to drive angle — athlete uses live dribble or pass-and-go’,
+rotationNote: ‘Alternate sides. Drive with high pickup → swing step → finish at rim.’,
+perSpot: {
+rightDrive: { task:‘Right Drive — High Pickup Swing Step’, cues:‘Pick up the ball high · Swing inside leg through · Don't broad jump · Tight gather’, finish:‘Swing Step Finish (R)’ },
+leftBlock:  { task:‘Left Block — Swing Step Finish’,       cues:‘Baseline attack · Swing step baseline side · Reach up high · Use glass or direct’, finish:‘Swing Step Finish (L)’ },
+}
+},
+{
+name: ‘Mikan + Block Finish’,
+type: ‘finish’,
+spots: [‘rightBlock’,‘leftBlock’],
+machineDelivery: ‘Block passes alternating — machine on baseline angle’,
+rotationNote: ‘Mikan rhythm. Athletes alternate blocks without a break. One line under the basket.’,
+perSpot: {
+rightBlock: { task:‘Right Block — Mikan Finish’, cues:‘High release · Off glass · Left hand goes immediately · No standing flat’, finish:‘Right Block Layup’ },
+leftBlock:  { task:‘Left Block — Mikan Finish’,  cues:‘High release · Mirror right hand timing · Flow into next rep’, finish:‘Left Block Layup’ },
+}
+},
+],
+
+combo: [
+{
+name: ‘Wing Read Drill’,
+type: ‘combo’,
+spots: [‘rightWing’,‘leftWing’],
+machineDelivery: ‘Delivers to wing — athlete reads “shoot” or “drive” call from coach’,
+rotationNote: ‘Two lines. Coach calls SHOOT or DRIVE as pass is in the air. Athlete reacts. Rotate to back of opposite line.’,
+perSpot: {
+rightWing: { task:‘Right Wing — Shoot or Drive Read’, cues:‘Hands ready before catch · Feet loaded · If SHOOT → square up; If DRIVE → one dribble attack left or right’, finish:‘Three or Drive Finish’ },
+leftWing:  { task:‘Left Wing — Shoot or Drive Read’,  cues:‘Mirror reads · Don't cheat either way · True read off coach call · Aggressive regardless’, finish:‘Three or Drive Finish’ },
+}
+},
+{
+name: ‘Elbow Read — Pull Up or Attack’,
+type: ‘combo’,
+spots: [‘rightElbow’,‘leftElbow’],
+machineDelivery: ‘Elbow delivery — athlete decides based on imaginary closeout speed’,
+rotationNote: ‘Two elbow lines. Athlete self-reads: closeout hard = pull up, closeout slow = attack rim.’,
+perSpot: {
+rightElbow: { task:‘Right Elbow Read’, cues:‘Catch in rhythm · Read closeout · If tight → shoot; If slow → one dribble drive · Make a decision fast’, finish:‘Mid or Rim’ },
+leftElbow:  { task:‘Left Elbow Read’,  cues:‘Same process left side · Don't favor one read · Mix it up each rep’, finish:‘Mid or Rim’ },
+}
+},
+{
+name: ‘Corner → Relocate → Shoot’,
+type: ‘combo’,
+spots: [‘rightCorner’,‘leftWing’],
+machineDelivery: ‘Corner pass first → skip to wing (coach or player skip) → wing shoots’,
+rotationNote: ‘Corner shooter catches → passes back to machine (or skips to wing) → sprints to wing → catches → shoots → rotates.’,
+perSpot: {
+rightCorner: { task:‘Right Corner — Catch, Skip, Relocate’, cues:‘Catch → look → skip to wing athlete · Sprint immediately to the wing · Simulate live game movement’, finish:‘Setup pass’ },
+leftWing:    { task:‘Left Wing — Catch off Skip Pass’,       cues:‘Read the skip early · Catch in rhythm → shoot immediately · No gathering · Trust your feet’, finish:‘Wing Three’ },
+}
+},
+{
+name: ‘One Dribble Pull Up Circuit’,
+type: ‘combo’,
+spots: [‘rightElbow’,‘nail’],
+machineDelivery: ‘Delivers to elbow or nail — athlete takes one dribble in a direction and pulls’,
+rotationNote: ‘Two lines. Catch → one dribble left or right → pull up. Alternate direction each rep.’,
+perSpot: {
+rightElbow: { task:‘Elbow One-Dribble Pull’, cues:‘Catch → one hard dribble toward nail or baseline → gather → pull up · Footwork must be clean · Sell the drive’, finish:‘Mid Pull Up’ },
+nail:       { task:‘Nail One-Dribble Pull’,  cues:‘Catch at nail → one dribble either direction → pull · Don't travel → quick gather’, finish:‘Mid Pull Up’ },
+}
+},
+{
+name: ‘Transition Shoot or Finish’,
+type: ‘combo’,
+spots: [‘rightWing’,‘leftBlock’],
+machineDelivery: ‘Wing pass for shooter in transition; block pass for finisher in transition’,
+rotationNote: ‘Two lines at half-court. Sprint to assigned spot → receive → execute. Alternate spots each round.’,
+perSpot: {
+rightWing:  { task:‘Transition Wing Shoot’, cues:‘Full sprint · Feet under you on catch · Don't slow down early · Attack the three in rhythm’, finish:‘Transition Three’ },
+leftBlock:  { task:‘Transition Drive Finish’,cues:‘Full sprint → receive on the run · One dribble max → finish at rim · Eyes on rim all the way’, finish:‘Transition Layup’ },
+}
+},
+{
+name: ‘Spot Up → Step Back’,
+type: ‘combo’,
+spots: [‘rightWing’,‘topKey’],
+machineDelivery: ‘Wing and top of key delivery alternating’,
+rotationNote: ‘Two lines. Catch → shot fake → one dribble step back → shoot. Or straight catch and shoot. Coach calls which.’,
+perSpot: {
+rightWing: { task:‘Right Wing — Fake or Shoot’, cues:‘If FAKE called: catch → strong fake → one dribble step back → shoot · If SHOOT: immediate release’, finish:‘Step Back Three or Spot Up’ },
+topKey:    { task:‘Top Key — Step Back or Shoot’, cues:‘Catch → feel the pressure → step back or fire · Don't hesitate on either option’, finish:‘Step Back or Spot Up’ },
+}
+},
+],
+
+competitive: [
+{
+name: ‘First to 5 — Corner Race’,
+type: ‘combo’,
+spots: [‘rightCorner’,‘leftCorner’],
+machineDelivery: ‘Alternates corners rapidly — pushes pace’,
+rotationNote: ‘One athlete per corner. Both shooting simultaneously off alternating machine passes. First to 5 makes wins. Loser sprints a lane, winner stays.’,
+perSpot: {
+rightCorner: { task:‘Corner Race — Right’, cues:‘Every rep counts · Don't rush form · Consistent release · Beat your opponent’, finish:‘Corner Three’ },
+leftCorner:  { task:‘Corner Race — Left’,  cues:‘Match the pace · Trust your shot · Pressure is the point’, finish:‘Corner Three’ },
+}
+},
+{
+name: ‘Beat the Machine — Make 10’,
+type: ‘combo’,
+spots: [‘rightWing’,‘leftWing’],
+machineDelivery: ‘Rapid-fire alternating wings — machine counts deliveries’,
+rotationNote: ‘Group must hit 10 makes before machine delivers 15 passes. All athletes rotate through 2 wing spots. Miss = lose one chance. Team counts together.’,
+perSpot: {
+rightWing: { task:‘Right Wing — Team Make’, cues:‘Every make is for the team · No bad shots · Quick release on open look · Sprint in and out’, finish:‘Wing Three or Drive’ },
+leftWing:  { task:‘Left Wing — Team Make’,  cues:‘Same pressure · High IQ shot selection · If it's not there, skip it’, finish:‘Wing Three or Drive’ },
+}
+},
+{
+name: ‘Knockout — Last Shooter Standing’,
+type: ‘combo’,
+spots: [‘rightElbow’,‘leftElbow’],
+machineDelivery: ‘Rapid delivery to both elbows simultaneously’,
+rotationNote: ‘Two athletes compete at a time. Miss from either spot = you're out. Group cycles in. Last person without a miss wins the round.’,
+perSpot: {
+rightElbow: { task:‘Knockout — Right Elbow’, cues:‘Survive each round · Form over speed · Breathe between reps · Miss = done’, finish:‘Elbow Mid’ },
+leftElbow:  { task:‘Knockout — Left Elbow’,  cues:‘Mirror pressure · Don't watch opponent · Own your shot’, finish:‘Elbow Mid’ },
+}
+},
+{
+name: ‘21 — Team Make Game’,
+type: ‘combo’,
+spots: [‘rightWing’,‘topKey’,‘leftWing’],
+machineDelivery: ‘Three spots, three athletes going simultaneously’,
+rotationNote: ‘Three athletes shoot simultaneously from 3 spots. Each make = 1 point. Team counts to 21. Misses don't count. Once 21 hit, rotate spots.’,
+perSpot: {
+rightWing: { task:‘21 — Right Wing’,  cues:‘Catch and fire · Hold form · Count loud’, finish:‘Wing Three’ },
+topKey:    { task:‘21 — Top of Key’,  cues:‘Be the anchor · Most reps go through top · Be ready’, finish:‘Top Three’ },
+leftWing:  { task:‘21 — Left Wing’,   cues:‘Match right wing tempo · Don't slow the group down’, finish:‘Wing Three’ },
+}
+},
+{
+name: ‘Pressure Free Throw Challenge’,
+type: ‘catch’,
+spots: [‘nail’],
+machineDelivery: ‘Simulates free throw pace — slower delivery’,
+rotationNote: ‘One athlete at a time at the line. Must make 2-in-a-row. If they miss, everyone does 5 pushups and they restart. Group cycles through.’,
+perSpot: {
+nail: { task:‘Pressure Free Throw’, cues:‘Full routine every single time · Bounce → breathe → target · Never skip the routine under pressure’, finish:‘Free Throw’ },
+}
+},
+],
+
+transition: [
+{
+name: ‘Outlet → Push → Finish Wave’,
+type: ‘combo’,
+spots: [‘rightDrive’,‘leftBlock’],
+machineDelivery: ‘Machine simulates outlet pass ahead — athlete catches in stride at half-court or beyond’,
+rotationNote: ‘Two lines at baseline. Sprint → machine delivers at speed → catch in stride → attack. Alternate sides. Finish and sprint to back of opposite line.’,
+perSpot: {
+rightDrive: { task:‘Right Side Transition Attack’, cues:‘Don't brake for the catch · Catch in stride · One dribble max → finish · Eyes on rim from half-court’, finish:‘Transition Layup or Floater’ },
+leftBlock:  { task:‘Left Side Transition Finish’,  cues:‘Attack the left block angle · High soft touch · Don't overshoot the basket’, finish:‘Transition Layup (L)’ },
+}
+},
+{
+name: ‘Secondary Break — Shoot or Drive’,
+type: ‘combo’,
+spots: [‘rightWing’,‘leftWing’],
+machineDelivery: ‘Wing pass in transition — athlete sprints to spot from baseline’,
+rotationNote: ‘Two lines at baseline. Full sprint to wing → catch → read → shoot or drive. Rotate to back of opposite wing.’,
+perSpot: {
+rightWing: { task:‘Right Wing — Secondary Break’, cues:‘Sprint don't jog · Feet set before catch if possible · Attack if defender is behind you’, finish:‘Three or Drive’ },
+leftWing:  { task:‘Left Wing — Secondary Break’,  cues:‘Same sprint effort · Don't wait for ball · Trust feet and shoot’, finish:‘Three or Drive’ },
+}
+},
+{
+name: ‘Trailer Three Wave’,
+type: ‘catch’,
+spots: [‘topKey’,‘rightCorner’],
+machineDelivery: ‘Top of key delivery for trailers; corner delivery for spotting up’,
+rotationNote: ‘Lead group attacks rim (simulated). Trailers sprint to top of key or corner for kick-out three. Machine delivers the kick.’,
+perSpot: {
+topKey:      { task:‘Trailer — Top of Key Three’, cues:‘Sprint into the catch · Don't stop short · Momentum into the shot → high arc’, finish:‘Trailer Three’ },
+rightCorner: { task:‘Spot Up Corner — Kick Out’,  cues:‘Catch in corner · Feet ready · Fire on catch · High confidence shot’, finish:‘Corner Three’ },
+}
+},
+{
+name: ‘Full Court Layup Pairs’,
+type: ‘finish’,
+spots: [‘rightBlock’,‘leftBlock’],
+machineDelivery: ‘Block delivery from baseline — athletes already sprinting full court’,
+rotationNote: ‘Pairs sprint full court. Machine delivers to right block, then left block on return. Alternate pairs. Non-stop pace.’,
+perSpot: {
+rightBlock: { task:‘Full Court — Right Block Finish’, cues:‘Full speed · Don't brake · High off glass · Sprint immediately after finish’, finish:‘Right Block Layup’ },
+leftBlock:  { task:‘Full Court — Left Block Finish’,  cues:‘Left hand strong · Same sprint effort · Touch and go’, finish:‘Left Block Layup’ },
+}
+},
+],
+};
+
+// How athletes are assigned to spots based on group size
+function buildSpotRotation(athletes, drill, repsPerAthlete) {
+const spots = drill.spots;
+const numSpots = spots.length; // always 1, 2, or 3
+
+// Build line assignments — each spot gets a line of athletes rotating through
+const lines = spots.map((spotId, i) => {
+const spot = SPOTS[spotId];
+const perSpotData = drill.perSpot[spotId];
+// Distribute athletes evenly across spots
+const athletesInLine = [];
+for (let a = i; a < athletes; a += numSpots) {
+athletesInLine.push(a + 1); // athlete numbers
+}
+return {
+spotId,
+spot,
+perSpotData,
+athletesInLine,
+};
+});
+
+return lines;
+}
+
+function generateDishWorkout(){
+const athletes = parseInt(document.getElementById(‘dish-athletes’).value);
+const duration = parseInt(document.getElementById(‘dish-duration’).value);
+const focus = document.getElementById(‘dish-focus’).value;
+const tempo = document.querySelector(‘input[name=“dish-tempo”]:checked’).value;
+const zones = document.querySelector(‘input[name=“dish-zones”]:checked’).value;
+
+const stationTime = tempo===‘elite’ ? 4 : tempo===‘competitive’ ? 5 : 7;
+const transitionTime = 1;
+const numStations = Math.max(3, Math.floor(duration / (stationTime + transitionTime)));
+const repsPerAthlete = tempo===‘elite’ ? 10 : tempo===‘competitive’ ? 8 : 6;
+
+// Filter drills by zone if needed, and by spots count if forced
+const spotsOverride = document.querySelector(‘input[name=“dish-rotation”]:checked’).value;
+const drillPool = […(DRILL_LIBRARY[focus] || DRILL_LIBRARY.combo)].filter(drill => {
+if(zones === ‘all’) {
+// filter by spots count if override
+if(spotsOverride === ‘one’) return drill.spots.length === 1;
+if(spotsOverride === ‘two’) return drill.spots.length === 2;
+if(spotsOverride === ‘three’) return drill.spots.length === 3;
+return true;
+}
+const spotZones = drill.spots.map(s => SPOTS[s]?.zone || ‘all’);
+if(zones === ‘threes’) return spotZones.some(z => z === ‘three’);
+if(zones === ‘midrange’) return spotZones.some(z => z === ‘mid’);
+if(zones === ‘paint’) return spotZones.some(z => z === ‘paint’);
+return true;
+});
+
+// Shuffle and fill to numStations
+const shuffled = […drillPool].sort(() => Math.random() - 0.5);
+const stations = [];
+for(let i = 0; i < numStations; i++){
+const drill = shuffled[i % shuffled.length];
+const lines = buildSpotRotation(athletes, drill, repsPerAthlete);
+stations.push({ num: i+1, drill, lines, time: stationTime });
+}
+
+renderDishWorkout({ stations, athletes, duration, focus, tempo, zones, stationTime, numStations, repsPerAthlete });
+}
+
+function renderDishWorkout({ stations, athletes, duration, focus, tempo, zones, stationTime, numStations, repsPerAthlete }){
+const output = document.getElementById(‘dish-output’);
+const focusLabel = {shooting:‘Shooting’,finishing:‘Finishing’,combo:‘Shooting + Finishing’,competitive:‘Competitive’,transition:‘Transition Offense’}[focus]||focus;
+const tempoLabel = {development:‘Development’,competitive:‘Competitive’,elite:‘Elite’}[tempo]||tempo;
+const totalReps = numStations * athletes * repsPerAthlete;
+
+let h = `<div class="dish-workout-title">📡 DR. DISH SESSION</div>
+
+  <div class="dish-workout-meta">${athletes} ATHLETES · ${duration} MIN · ${focusLabel.toUpperCase()} · ${tempoLabel.toUpperCase()} · ${numStations} DRILLS</div>`;
+
+stations.forEach((station) => {
+const drill = station.drill;
+const typeLabel = drill.type === ‘catch’ ? ‘CATCH & SHOOT’ : drill.type === ‘finish’ ? ‘FINISHING’ : drill.type === ‘combo’ ? ‘COMBO READ’ : drill.type.toUpperCase();
+const badgeClass = drill.type === ‘combo’ ? ‘badge-combo’ : drill.type === ‘finish’ ? ‘badge-off-dribble’ : ‘badge-catch’;
+const numSpots = station.lines.length;
+
+```
+h += `<div class="dish-station">
+  <div class="dish-station-hdr">
+    <span class="dish-station-num">${station.num}</span>
+    <div class="dish-station-info">
+      <div class="dish-station-name">${drill.name}</div>
+      <div class="dish-station-sub">${station.time} MIN · ${numSpots} ACTIVE SPOT${numSpots>1?'S':''} · ALL ${athletes} ATHLETES ON MACHINE</div>
+    </div>
+    <span class="dish-station-badge ${badgeClass}">${typeLabel}</span>
+  </div>
+  <div class="dish-station-body">`;
+
+// Machine delivery info
+h += `<div style="background:rgba(59,130,246,.05);border:1px solid rgba(59,130,246,.12);border-radius:3px;padding:9px 12px;margin-bottom:12px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-start;">
+  <div style="flex:1;min-width:180px;">
+    <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--dish-accent);letter-spacing:1px;margin-bottom:3px;">📡 MACHINE DELIVERY</div>
+    <div style="font-size:13px;font-weight:600;">${drill.machineDelivery}</div>
+  </div>
+  <div style="flex:1;min-width:180px;">
+    <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;margin-bottom:3px;">🔄 ROTATION</div>
+    <div style="font-size:12px;color:var(--text2);">${drill.rotationNote}</div>
+  </div>
+</div>`;
+
+// Spots
+station.lines.forEach((line, li) => {
+  const spot = line.spot;
+  const pd = line.perSpotData;
+  const athNums = line.athletesInLine;
+  const spotColor = spot.zone === 'three' ? 'var(--accent3)' : spot.zone === 'mid' ? 'var(--accent2)' : 'var(--accent)';
+  const spotBorder = spot.zone === 'three' ? 'rgba(34,197,94,.2)' : spot.zone === 'mid' ? 'rgba(245,166,35,.2)' : 'rgba(232,65,10,.2)';
+
+  h += `<div style="background:var(--surface);border:1px solid ${spotBorder};border-radius:3px;padding:12px 14px;margin-bottom:8px;">
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;">
+      <span style="font-size:18px;">${spot.icon}</span>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:${spotColor};">${spot.label}</div>
+        <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);">MACHINE ANGLE: ${spot.angle} · ATHLETES IN LINE: ${athNums.map(n=>'#'+n).join(', ')}</div>
+      </div>
+    </div>
+    <div class="dish-task-name">${pd.task}</div>
+    <div class="dish-task-detail" style="margin-top:4px;">${pd.cues}</div>
+    <div style="margin-top:8px;display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <div class="dish-reps-badge"><span class="dish-reps-text">🎯 ${repsPerAthlete} MAKES / ATHLETE · ${pd.finish}</span></div>
+      <div style="font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);">${athNums.length} athlete${athNums.length>1?'s':''} in this line</div>
+    </div>
+  </div>`;
+});
+
+h += `</div>
+  <div class="dish-timing-bar">
+    <span class="dish-timing-item">⏱ <span>${station.time} min</span></span>
+    <span class="dish-timing-item">🔁 <span>All ${athletes} athletes rotating</span></span>
+    <span class="dish-timing-item">🎯 <span>${repsPerAthlete} makes/athlete</span></span>
+    <span class="dish-timing-item">📍 <span>Transition: 60 sec</span></span>
+  </div>
+</div>`;
+```
+
+});
+
+// Summary
+h += `<div class="dish-summary">
+<div class="dish-summary-title">📊 SESSION SUMMARY</div>
+<div class="dish-summary-grid">
+<div class="dish-stat"><div class="dish-stat-num">${numStations}</div><div class="dish-stat-label">DRILLS</div></div>
+<div class="dish-stat"><div class="dish-stat-num">${athletes}</div><div class="dish-stat-label">ATHLETES</div></div>
+<div class="dish-stat"><div class="dish-stat-num">${duration}</div><div class="dish-stat-label">MINUTES</div></div>
+<div class="dish-stat"><div class="dish-stat-num">${totalReps}+</div><div class="dish-stat-label">TOTAL REPS</div></div>
+<div class="dish-stat"><div class="dish-stat-num">${stationTime}</div><div class="dish-stat-label">MIN/DRILL</div></div>
+<div class="dish-stat"><div class="dish-stat-num">${repsPerAthlete}</div><div class="dish-stat-label">MAKES/ATH</div></div>
+</div>
+<div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap;">
+<button class="btn btn-blue" onclick="generateDishWorkout()">↺ REGENERATE</button>
+<button class="btn btn-ghost" onclick="printDishWorkout()">PRINT SESSION</button>
+</div>
+
+  </div>`;
+
+output.innerHTML = h;
+output.scrollIntoView({ behavior:‘smooth’, block:‘start’ });
+}
+
+function printDishWorkout(){
+const content = document.getElementById(‘dish-output’).innerText;
+const w = window.open(’’,’_blank’);
+w.document.write(`<html><head><title>Dr. Dish Session</title><style>body{font-family:monospace;padding:32px;max-width:700px;font-size:13px;line-height:1.6;}h1{color:#3b82f6;font-size:24px;letter-spacing:4px;margin-bottom:20px;}pre{white-space:pre-wrap;} /* ── INLINE PICKER ── */ .inline-picker{margin-top:8px;background:var(--surface);border:1px solid var(--border2);border-radius:3px;overflow:hidden;max-height:220px;overflow-y:auto;} .inline-picker::-webkit-scrollbar{width:3px;} .inline-picker::-webkit-scrollbar-thumb{background:var(--border2);} .picker-item{padding:7px 11px;font-size:12px;font-weight:600;cursor:pointer;border-bottom:1px solid rgba(255,255,255,.03);transition:all .1s;display:flex;align-items:center;gap:7px;} .picker-item:last-child{border-bottom:none;} .picker-item:hover{background:rgba(255,255,255,.05);} .picker-item.picked{background:rgba(232,65,10,.1);color:var(--accent);} .picker-item.picked-orange{background:rgba(245,166,35,.1);color:var(--accent2);} .picker-item.picked-green{background:rgba(34,197,94,.1);color:var(--accent3);} .picker-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;} .dot-rim{background:var(--accent2);} .dot-mid{background:var(--accent2);} .dot-three{background:#ffffff;} .dot-start{background:var(--accent2);} </style></head><body><h1>DR. DISH SESSION</h1><pre>${content}</pre></body></html>`);
+w.document.close(); w.print();
+}
+
+// ══════════════════════════════════════════
+// INIT
+// ══════════════════════════════════════════
+renderBagSidebar();
+renderBagContent();
+renderHandles();
+</script>
+
+</body>
+</html>
