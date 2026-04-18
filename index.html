@@ -267,6 +267,8 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
 </head>
 <body>
 
+<div id="debug-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#ff0000;color:white;font-size:11px;padding:6px;z-index:9999;font-family:monospace;word-break:break-all;"></div>
+
 <nav class="top-nav">
   <div style="display:flex;align-items:center;gap:10px;margin-right:16px;flex-shrink:0;">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="38" height="38" style="flex-shrink:0;">
@@ -1784,10 +1786,22 @@ w.document.close(); w.print();
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
+window.onerror = function(msg, src, line, col, err){
+var d = document.getElementById(‘debug-bar’);
+if(d){ d.style.display=‘block’; d.textContent = ’ERROR line ‘+line+’: ’+msg; }
+return false;
+};
+
 function init(){
-try { renderBagSidebar(); } catch(e){ console.error(‘renderBagSidebar’,e); }
-try { renderBagContent(); } catch(e){ console.error(‘renderBagContent’,e); }
-try { renderHandles(); } catch(e){ console.error(‘renderHandles’,e); }
+try {
+renderBagSidebar();
+renderBagContent();
+renderHandles();
+} catch(e){
+var d = document.getElementById(‘debug-bar’);
+if(d){ d.style.display=‘block’; d.textContent = ’INIT ERROR: ‘+e.message+’ at ’+e.stack; }
+console.error(e);
+}
 }
 
 if(document.readyState === ‘loading’){
