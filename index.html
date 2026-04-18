@@ -1786,6 +1786,270 @@ function printDishWorkout(){
 }
 
 // ══════════════════════════════════════════
+// SESSION PLAN GENERATOR
+// ══════════════════════════════════════════
+
+// Per-skill prescription data
+const SKILL_PLANS = {
+  // BAG WORK
+  bag: {
+    default: { sets:4, reps:10, rest:'30s', time:'45s', volume:'40 quality reps', hands:['Both Hands'] },
+    'Simple Cross':           { sets:4, reps:12, rest:'30s', time:'45s', volume:'48 reps', hands:['Right→Left','Left→Right'], cues:['Stay low and tight through the cross','Shoulder dips with every rep','Eyes up -- feel the move, don\'t watch the ball'] },
+    'Blow By':                { sets:4, reps:8,  rest:'30s', time:'40s', volume:'32 reps', hands:['Right Hand','Left Hand'], cues:['Sell the hesitation first','Explode PAST the contact point -- not just to it','Low center of gravity on the go'] },
+    'Hesi Counter':           { sets:4, reps:8,  rest:'30s', time:'40s', volume:'32 reps', hands:['Right Hand','Left Hand'], cues:['Load the defender -- make them commit','Change speed not just direction','Go when they stop -- not before'] },
+    'In-Out':                 { sets:4, reps:10, rest:'25s', time:'40s', volume:'40 reps', hands:['Right Hand','Left Hand'], cues:['Sell the cross -- body language matters','Keep the ball in front','Quick gather after the out'] },
+    'Iverson Cross':          { sets:4, reps:8,  rest:'30s', time:'45s', volume:'32 reps', hands:['Right→Left','Left→Right'], cues:['Shoulder dip is the move -- not just the hand','Get the defender\'s eyes to follow','Low cross, tight, no daylight'] },
+    'BTB Float':              { sets:3, reps:8,  rest:'35s', time:'45s', volume:'24 reps', hands:['Right Hand','Left Hand'], cues:['Float the ball in front first','BTB as separator -- not first move','Stay balanced through the BTB'] },
+    'Euro':                   { sets:4, reps:6,  rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Two-foot gather -- no hopping','Step direction off the help side','Extend fully -- don\'t short-arm it'] },
+    'Floater':                { sets:4, reps:8,  rest:'30s', time:'45s', volume:'32 attempts', hands:['Right Hand','Left Hand'], cues:['Release point is higher than you think','Soft touch -- let the ball float, don\'t push','One gather step, then up'] },
+  },
+  // POWER DRIBBLE starts
+  power: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 quality reps', hands:['Both Sides'] },
+    'Bump to Floater':   { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Establish the pound first -- create the rhythm','Bump contact with inside shoulder','Float off the bump -- don\'t reset feet'] },
+    'Bump to Layup':     { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Go through the contact not around it','High soft pickup after the bump','Strong finish -- expect contact'] },
+    'To Swing Step':     { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Right Side','Left Side'], cues:['Power dribble to load -- swing through the leg','Tight gather -- no extra steps','Finish high with balance'] },
+    'To Euro':           { sets:4, reps:5, rest:'45s', time:'50s', volume:'20 makes', hands:['Right Side','Left Side'], cues:['Power dribble draws help -- euro off the help side','Two steps -- no gather hop','Stay low through the step'] },
+    'To Laylah Spin':    { sets:3, reps:5, rest:'45s', time:'50s', volume:'15 reps', hands:['Right Side','Left Side'], cues:['Spin tight -- no wide circles','Same foot plant going into spin','Finish on the near side of the rim'] },
+  },
+  // PRO HOP starts
+  prohop: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Both Sides'] },
+    'To Floater':         { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Middle','Right Lane','Left Lane'], cues:['Two-foot gather on the hop','Float immediately off the land -- no reset','High release over help'] },
+    'To Step Through':    { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 reps', hands:['Right Side','Left Side'], cues:['Hop to draw the block','Step through low -- under the contest','Finish with either hand'] },
+    'Pump Bump and Shoot':{ sets:3, reps:6, rest:'40s', time:'50s', volume:'18 makes', hands:['Right Side','Left Side'], cues:['Pump fake must be convincing -- full extension','Draw contact on the bump','Land balanced before shooting'] },
+    'To Reverse Pivot':   { sets:3, reps:6, rest:'40s', time:'50s', volume:'18 reps', hands:['Right Side','Left Side'], cues:['Hop to gather -- pivot on land','Reverse away from help','Quick release off the pivot'] },
+    'To Slide By':        { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Hop to engage -- slide past on land','Stay low through the slide','Finish soft -- you\'re already by them'] },
+  },
+  // FINISH IN TRAFFIC
+  traffic: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Both Sides'] },
+    'Pinoy Step':         { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Contact is the trigger -- not the basket','Step across the body tight','High soft release off the step'] },
+    'Euro':               { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Attack help first -- earn the euro','Two-step gather, stay low','Extend fully through contact'] },
+    'Tuck Bump':          { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Tuck the ball tight through contact','Don\'t reach -- protect the ball','Finish strong off the bump'] },
+    'Veer Bump':          { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Veer into the defender -- controlled contact','Bump and redirect -- don\'t stop','Soft finish off the veer'] },
+    'Swing Step High Pickup': { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['High pickup protects ball in traffic','Swing through the contact point','Finish at the highest point you can reach'] },
+  },
+  // TOUCH FINISHES
+  touch: {
+    default: { sets:4, reps:8, rest:'35s', time:'45s', volume:'32 makes', hands:['Right Hand','Left Hand'] },
+    'Two Foot Floater Both Hands': { sets:4, reps:8, rest:'35s', time:'45s', volume:'32 makes', hands:['Right Hand','Left Hand'], cues:['Two-foot gather every time -- discipline','Release off two feet -- no one-foot cheat','Alternate hands each rep'] },
+    'Downhill Runner':      { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 makes', hands:['Right Hand','Left Hand'], cues:['Full speed -- don\'t brake for the finish','Eyes on the rim from outside the paint','Runner off one foot -- momentum finish'] },
+    'Inside Hand Scoop':    { sets:4, reps:8, rest:'35s', time:'45s', volume:'32 makes', hands:['Right Hand','Left Hand'], cues:['Inside hand is the weak hand -- own it','Scoop over the near shoulder of the defender','High arc -- let the backboard help'] },
+    'Outside the Lane Hook':{ sets:3, reps:8, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Hand','Left Hand'], cues:['Step across on the hook','Release above the box -- not the lane line','Elbow up -- protect the ball'] },
+  },
+  // LAYUPS
+  layups: {
+    default: { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 makes', hands:['Right Side','Left Side'] },
+    'Normal Scoop':    { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 makes', hands:['Right Side','Left Side'], cues:['High off the glass','Inside foot takeoff on right side','Extend fully -- don\'t flip it'] },
+    'High Pickup':     { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 makes', hands:['Right Side','Left Side'], cues:['Pick it up high -- protect from the reach','Gather above the waist','Finish strong -- expect contest'] },
+    'Same Foot':       { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Same foot plant creates deception','Stay low into the gather','Jump off same foot -- don\'t double hop'] },
+    'OG Reverse':      { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Run past the rim first -- sell the straight line','Plant and reverse under control','Soft touch off the far side of the board'] },
+    'Pinoy Reverse':   { sets:4, reps:6, rest:'40s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Pinoy step creates the angle','High soft touch on the reverse','Protect the ball through the gather'] },
+  },
+  // CROSSOVERS
+  crossovers: {
+    default: { sets:4, reps:10, rest:'30s', time:'45s', volume:'40 reps', hands:['Right→Left','Left→Right'] },
+    'BTB Cross':       { sets:4, reps:8,  rest:'35s', time:'45s', volume:'32 reps', hands:['Right→Left','Left→Right'], cues:['Drive the ball around -- don\'t let it float','Stay low through the BTB','Eyes forward the whole way'] },
+    'Scissor Cross':   { sets:4, reps:8,  rest:'35s', time:'45s', volume:'32 reps', hands:['Right→Left','Left→Right'], cues:['Scissor first -- make them react','Cross tight after the scissor','Attack immediately after the cross'] },
+    'Float Crossover': { sets:4, reps:8,  rest:'30s', time:'45s', volume:'32 reps', hands:['Right→Left','Left→Right'], cues:['Let the ball float out front first','Cross through the float -- one motion','Attack off the cross -- don\'t reset'] },
+  },
+  // STRIDE STOP
+  stride: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Both Sides'] },
+    'To Forward Pivot Hook / Floater': { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Stride stop -- two feet together','Forward pivot immediately after stop','Hook or float off the pivot -- no extra dribble'] },
+    'To Forward Pivot Shot':           { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Stop balanced on two feet','Pivot into your shot -- no drift','Quick release off the pivot'] },
+    'To Forward Pivot Up and Under':   { sets:3, reps:6, rest:'40s', time:'50s', volume:'18 makes', hands:['Right Side','Left Side'], cues:['Stride stop -- load the defender','Shot fake off the pivot','Up and under on the step'] },
+  },
+  // MIDDY MOVES
+  middy: {
+    default: { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Hand','Left Hand'] },
+    'Hop Mini Fade':        { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Short hop -- not a big jump','Fade on the hop -- create separation','Quick release at top of fade'] },
+    'Half Spin Mini Fade':  { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['Half spin only -- stay tight','Fade immediately out of the spin','Balance on the fade -- no lean'] },
+    '1-2 Mini Fade':        { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Side','Left Side'], cues:['1-2 rhythm -- don\'t rush it','Fade on the 2','Hold the follow-through'] },
+    'BTB Step Back':        { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Hand','Left Hand'], cues:['BTB first to sell the drive','Step back creates separation','Balanced catch and shoot off step back'] },
+    'Crossover Step Back':  { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right→Left','Left→Right'], cues:['Hard cross to sell the attack','Step back off the cross','Quick shot -- don\'t let them recover'] },
+    'Punch Middy':          { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 makes', hands:['Right Hand','Left Hand'], cues:['Punch dribble to change speed','Pull up immediately off the punch','Balanced two-foot stop'] },
+  },
+  // LIVE DRIBBLE
+  live: {
+    default: { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 reps', hands:['Right Hand','Left Hand'] },
+    'Quick Blow By':   { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 reps', hands:['Right Hand','Left Hand'], cues:['First step is the move -- make it count','Stay low through the acceleration','Eyes on the rim from the first step'] },
+    'Float and Go':    { sets:4, reps:8, rest:'30s', time:'40s', volume:'32 reps', hands:['Right Hand','Left Hand'], cues:['Float the ball out front','Explode past when they reach','One dribble max after the float'] },
+    'Double Tween':    { sets:4, reps:6, rest:'35s', time:'45s', volume:'24 reps', hands:['Both Hands'], cues:['Rhythm is everything on double tween','Stay low -- don\'t bounce up between tweens','Attack off the second tween'] },
+  },
+  // SPEED
+  speed: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Right Hand','Left Hand'] },
+  },
+  // STOPS
+  stops: {
+    default: { sets:4, reps:8, rest:'30s', time:'45s', volume:'32 reps', hands:['Right Hand','Left Hand'] },
+    'BTB Speed Stop':  { sets:4, reps:8, rest:'30s', time:'45s', volume:'32 reps', hands:['Right Hand','Left Hand'], cues:['Build full speed first -- the stop means nothing without it','BTB on the stop -- protect the ball','Explode back the other way immediately'] },
+  },
+  // SPACE
+  space: {
+    default: { sets:4, reps:8, rest:'30s', time:'45s', volume:'32 reps', hands:['Right Hand','Left Hand'] },
+  },
+  // DOWNHILL
+  downhill: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Right Side','Left Side'] },
+  },
+  // CUTOFF
+  cutoff: {
+    default: { sets:4, reps:6, rest:'40s', time:'45s', volume:'24 reps', hands:['Both Sides'] },
+    'BTB and Go':           { sets:4, reps:6, rest:'40s', time:'45s', volume:'24 reps', hands:['Right Hand','Left Hand'], cues:['BTB cuts off the pursuit angle','Go immediately after -- no reset','Attack the space behind them'] },
+    'Scissor and Go':       { sets:4, reps:6, rest:'40s', time:'45s', volume:'24 reps', hands:['Right Hand','Left Hand'], cues:['Scissor creates hesitation','Go before they recover','Low and fast off the scissor'] },
+    'Anchor Step and Go':   { sets:4, reps:6, rest:'40s', time:'45s', volume:'24 reps', hands:['Both Sides'], cues:['Plant the anchor foot hard','Redirect off the anchor -- sharp angle','Accelerate immediately through the gap'] },
+  },
+  // PRESSURE
+  pressure: {
+    default: { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Both Hands'] },
+    'Retreat and Attack':   { sets:4, reps:6, rest:'40s', time:'50s', volume:'24 reps', hands:['Right Hand','Left Hand'], cues:['Retreat resets their momentum','Attack before they can re-load','Change of pace is the weapon'] },
+  },
+};
+
+function getSkillPlan(catId, skillName) {
+  const catPlan = SKILL_PLANS[catId] || {};
+  return catPlan[skillName] || catPlan['default'] || {
+    sets:4, reps:8, rest:'30s', time:'45s', volume:'32 reps', hands:['Both Hands'], cues:[]
+  };
+}
+
+function generateSessionPlan() {
+  if(workoutOrder.length === 0 && philWorkout.length === 0) {
+    alert('Add some moves to your workout first!');
+    return;
+  }
+
+  const totalMoves = workoutOrder.length;
+  let totalSets = 0;
+  let totalMins = 0;
+
+  let bodyHtml = '';
+
+  // Summary will be filled after calculating
+  const summaryPlaceholder = '<div id="sp-summary-placeholder"></div>';
+  bodyHtml += summaryPlaceholder;
+
+  workoutOrder.forEach((key, i) => {
+    const entry = selected[key];
+    if(!entry) return;
+    const cat = CATEGORIES.find(c => c.id === entry.catId);
+    const plan = getSkillPlan(entry.catId, entry.skill);
+    const mode = entry.mode || getMode(entry.catId);
+    const finish = entry.finish;
+    const finishName = entry.finishName;
+    const startName = entry.startName;
+    const spotName = entry.spotName;
+
+    totalSets += plan.sets;
+    // Estimate time: sets * (time_per_set + rest)
+    const timePerSet = parseInt(plan.time) || 45;
+    const restSec = parseInt(plan.rest) || 30;
+    totalMins += Math.round((plan.sets * (timePerSet + restSec)) / 60 * 10) / 10;
+
+    // Badge color per mode
+    const badgeColor = mode === 'start' ? 'var(--accent2)' : mode === 'spot' ? '#fff' : 'var(--accent2)';
+    const badgeBg = mode === 'start' ? 'rgba(192,132,252,.12)' : mode === 'spot' ? 'rgba(255,255,255,.08)' : 'rgba(192,132,252,.12)';
+    const modeLabel = mode === 'start' ? 'BEGIN WITH' : mode === 'spot' ? 'MIDDY SPOT' : 'FINISH';
+    const modeValue = mode === 'start' ? (startName || '—') : mode === 'spot' ? (spotName || 'RANDOM') : (finish ? finish.toUpperCase() + (finishName ? ' · ' + finishName : '') : '—');
+
+    bodyHtml += '<div class="sp-card">';
+
+    // Header
+    bodyHtml += '<div class="sp-card-hdr">';
+    bodyHtml += '<span class="sp-num">' + (i+1) + '</span>';
+    bodyHtml += '<div class="sp-move">';
+    bodyHtml += '<div class="sp-move-name">' + entry.skill + '</div>';
+    bodyHtml += '<div class="sp-move-cat">' + (cat ? cat.icon + ' ' + cat.name : '') + '</div>';
+    bodyHtml += '</div>';
+    if(modeValue !== '—') {
+      bodyHtml += '<div style="text-align:right;">';
+      bodyHtml += '<div style="font-family:monospace;font-size:7px;color:var(--muted);letter-spacing:1px;">' + modeLabel + '</div>';
+      bodyHtml += '<div style="font-size:11px;font-weight:700;color:' + badgeColor + ';">' + modeValue + '</div>';
+      bodyHtml += '</div>';
+    }
+    bodyHtml += '</div>';
+
+    // Stats grid
+    bodyHtml += '<div class="sp-body">';
+    bodyHtml += '<div class="sp-stat"><div class="sp-stat-val">' + plan.sets + '</div><div class="sp-stat-label">SETS</div></div>';
+    bodyHtml += '<div class="sp-stat"><div class="sp-stat-val">' + plan.reps + '</div><div class="sp-stat-label">REPS / SET</div></div>';
+    bodyHtml += '<div class="sp-stat"><div class="sp-stat-val">' + plan.time + '</div><div class="sp-stat-label">WORK TIME</div></div>';
+    bodyHtml += '<div class="sp-stat"><div class="sp-stat-val">' + plan.rest + '</div><div class="sp-stat-label">REST</div></div>';
+    bodyHtml += '<div class="sp-stat" style="grid-column:span 2"><div class="sp-stat-val" style="font-size:14px;padding-top:4px;">' + plan.volume + '</div><div class="sp-stat-label">VOLUME TARGET</div></div>';
+    bodyHtml += '</div>';
+
+    // Hand/side chips
+    if(plan.hands && plan.hands.length) {
+      bodyHtml += '<div class="sp-hand-row">';
+      plan.hands.forEach(h => {
+        bodyHtml += '<span class="sp-hand-chip">' + h + '</span>';
+      });
+      bodyHtml += '</div>';
+    }
+
+    // Coaching cues
+    if(plan.cues && plan.cues.length) {
+      bodyHtml += '<div class="sp-cues">';
+      plan.cues.forEach(cue => {
+        bodyHtml += '<div class="sp-cue-row"><span class="sp-cue-dot"></span><span class="sp-cue-text">' + cue + '</span></div>';
+      });
+      bodyHtml += '</div>';
+    }
+
+    bodyHtml += '</div>'; // close sp-card
+  });
+
+  // Phil handle drills
+  if(philWorkout.length > 0) {
+    bodyHtml += '<div style="font-family:sans-serif;font-size:20px;letter-spacing:3px;color:var(--accent2);margin:16px 0 10px;border-top:1px solid var(--border);padding-top:14px;">HANDLE WORK</div>';
+    philWorkout.forEach((step, i) => {
+      bodyHtml += '<div class="sp-card">';
+      bodyHtml += '<div class="sp-card-hdr"><span class="sp-num">' + (workoutOrder.length + i + 1) + '</span>';
+      bodyHtml += '<div class="sp-move"><div class="sp-move-name">' + step.name + '</div>';
+      bodyHtml += '<div class="sp-move-cat">🔁 HANDLES</div></div></div>';
+      bodyHtml += '<div class="sp-body">';
+      bodyHtml += '<div class="sp-stat" style="grid-column:span 2"><div class="sp-stat-val" style="font-size:13px;padding-top:2px;">' + step.reps + '</div><div class="sp-stat-label">PRESCRIPTION</div></div>';
+      bodyHtml += '</div>';
+      bodyHtml += '<div class="sp-cues"><div class="sp-cue-row"><span class="sp-cue-dot"></span><span class="sp-cue-text">' + step.cues + '</span></div></div>';
+      bodyHtml += '</div>';
+    });
+  }
+
+  // Build summary
+  const totalMinsRounded = Math.round(totalMins);
+  const summaryHtml = '<div class="sp-summary">' +
+    '<div style="font-family:sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent2);">SESSION OVERVIEW</div>' +
+    '<div class="sp-summary-grid">' +
+    '<div class="sp-summary-stat"><div class="sp-summary-num">' + totalMoves + '</div><div class="sp-summary-lbl">MOVES</div></div>' +
+    '<div class="sp-summary-stat"><div class="sp-summary-num">' + totalSets + '</div><div class="sp-summary-lbl">TOTAL SETS</div></div>' +
+    '<div class="sp-summary-stat"><div class="sp-summary-num">' + totalMinsRounded + '</div><div class="sp-summary-lbl">EST. MINS</div></div>' +
+    '<div class="sp-summary-stat"><div class="sp-summary-num">' + (totalSets * 8) + '+</div><div class="sp-summary-lbl">TOTAL REPS</div></div>' +
+    '</div></div>';
+
+  bodyHtml = bodyHtml.replace(summaryPlaceholder, summaryHtml);
+
+  document.getElementById('sessionPlanBody').innerHTML = bodyHtml;
+  document.getElementById('sessionPlanMeta').textContent = totalMoves + ' MOVES · ' + totalSets + ' SETS · ~' + totalMinsRounded + ' MIN';
+  document.getElementById('sessionPlanPanel').classList.add('open');
+}
+
+function closeSessionPlan() {
+  document.getElementById('sessionPlanPanel').classList.remove('open');
+}
+
+function printSessionPlan() {
+  const meta = document.getElementById('sessionPlanMeta').textContent;
+  const body = document.getElementById('sessionPlanBody').innerText;
+  const w = window.open('', '_blank');
+  w.document.write('<html><head><title>THE LAB — Session Plan</title><style>body{font-family:monospace;padding:32px;max-width:680px;background:#0d0a14;color:#fff;}h1{color:#c084fc;font-size:28px;letter-spacing:4px;margin-bottom:4px;}h3{color:#6b5a85;font-size:10px;letter-spacing:3px;font-weight:normal;margin-bottom:20px;}pre{white-space:pre-wrap;color:#c4b5d8;font-size:12px;line-height:1.7;}</style></head><body><h1>THE LAB</h1><h3>SESSION PLAN · ' + meta + '</h3><pre>' + body + '</pre></body></html>');
+  w.document.close();
+  w.print();
+}
+
+// ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 window.onerror = function(msg, src, line, col, err){
