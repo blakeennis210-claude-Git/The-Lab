@@ -1,0 +1,17 @@
+{
+  "name": "The Lab",
+  "short_name": "The Lab",
+  "description": "Intentional Reps. Undeniable Results.",
+  "start_url": "/The-Lab/",
+  "display": "standalone",
+  "background_color": "#0d0a14",
+  "theme_color": "#9333ea",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%239333ea'/><text y='75' font-size='70' text-anchor='middle' x='50'>🐱</text></svg>",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
