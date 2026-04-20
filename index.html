@@ -241,6 +241,57 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
   .cat-btn .cc{display:none;}
 }
 
+/* ── AUTH / LOGIN ── */
+.auth-overlay{position:fixed;inset:0;z-index:1000;background:#0d0a14;display:flex;align-items:center;justify-content:center;padding:20px;}
+.auth-box{width:100%;max-width:380px;background:var(--surface);border:1px solid var(--border2);border-radius:6px;overflow:hidden;}
+.auth-logo{text-align:center;padding:28px 24px 16px;border-bottom:1px solid var(--border);}
+.auth-logo-img{width:56px;height:56px;filter:invert(60%) sepia(80%) saturate(500%) hue-rotate(240deg) brightness(110%);}
+.auth-logo-name{font-family:'Bebas Neue','Arial Black',impact,sans-serif;font-size:32px;letter-spacing:5px;color:var(--text);margin-top:6px;}
+.auth-logo-name span{color:var(--accent2);}
+.auth-logo-slogan{font-family:'Space Mono','Courier New',monospace;font-size:8px;letter-spacing:2px;color:var(--muted);margin-top:4px;}
+.auth-body{padding:24px;}
+.auth-tabs{display:flex;gap:4px;margin-bottom:20px;}
+.auth-tab{flex:1;font-family:'Bebas Neue','Arial Black',impact,sans-serif;letter-spacing:2px;font-size:14px;padding:8px;border:1px solid var(--border2);background:none;color:var(--muted);cursor:pointer;border-radius:3px;transition:all .15s;}
+.auth-tab.active{background:var(--accent);color:#fff;border-color:var(--accent);}
+.auth-field{margin-bottom:14px;}
+.auth-label{font-family:'Space Mono','Courier New',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:5px;display:block;}
+.auth-input{width:100%;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Barlow Condensed','Arial Narrow',arial,sans-serif;font-size:16px;padding:10px 12px;border-radius:3px;outline:none;transition:border-color .15s;}
+.auth-input:focus{border-color:var(--accent2);}
+.auth-btn{width:100%;font-family:'Bebas Neue','Arial Black',impact,sans-serif;letter-spacing:3px;font-size:16px;padding:12px;border:none;border-radius:3px;cursor:pointer;background:var(--accent);color:#fff;transition:all .15s;margin-top:4px;}
+.auth-btn:hover{background:var(--accent-bright);}
+.auth-btn:disabled{background:var(--muted);cursor:not-allowed;}
+.auth-msg{font-family:'Space Mono','Courier New',monospace;font-size:10px;text-align:center;margin-top:12px;padding:8px;border-radius:3px;}
+.auth-msg.error{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.2);}
+.auth-msg.success{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.2);}
+.auth-msg.pending{background:rgba(245,166,35,.1);color:var(--accent2);border:1px solid rgba(245,166,35,.2);}
+
+/* ── PLAYER DASHBOARD ── */
+.player-header{background:var(--surface);border-bottom:1px solid var(--border);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.player-welcome{font-family:'Bebas Neue','Arial Black',impact,sans-serif;font-size:18px;letter-spacing:2px;color:var(--accent2);}
+.player-email{font-family:'Space Mono','Courier New',monospace;font-size:9px;color:var(--muted);margin-top:2px;}
+
+/* ── SAVED WORKOUTS ── */
+.saved-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:8px;cursor:pointer;transition:all .12s;}
+.saved-card:hover{border-color:var(--accent2);}
+.saved-card-name{font-weight:700;font-size:15px;color:var(--text);}
+.saved-card-meta{font-family:'Space Mono','Courier New',monospace;font-size:8px;color:var(--muted);margin-top:4px;letter-spacing:1px;}
+.saved-card-actions{display:flex;gap:6px;margin-top:10px;}
+
+/* ── HIGHLIGHTS ── */
+.highlight-card{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:14px;margin-bottom:8px;}
+.highlight-title{font-weight:700;font-size:14px;}
+.highlight-meta{font-family:'Space Mono','Courier New',monospace;font-size:8px;color:var(--muted);margin-top:3px;}
+.highlight-link{display:inline-flex;align-items:center;gap:6px;margin-top:8px;font-family:'Space Mono','Courier New',monospace;font-size:9px;color:var(--accent2);text-decoration:none;border:1px solid rgba(192,132,252,.3);padding:4px 10px;border-radius:100px;transition:all .12s;}
+.highlight-link:hover{background:rgba(192,132,252,.1);}
+
+/* ── ADMIN ── */
+.admin-player-row{background:var(--card);border:1px solid var(--border);border-radius:3px;padding:12px 14px;margin-bottom:6px;display:flex;align-items:center;gap:10px;}
+.admin-player-email{flex:1;font-size:13px;font-weight:600;}
+.admin-player-status{font-family:'Space Mono','Courier New',monospace;font-size:8px;padding:3px 8px;border-radius:100px;}
+.status-pending{background:rgba(245,166,35,.1);color:var(--accent2);border:1px solid rgba(245,166,35,.3);}
+.status-approved{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.3);}
+.status-denied{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.3);}
+
 /* ── SESSION PLAN ── */
 .sp-card{background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:10px;overflow:hidden;}
 .sp-card-hdr{background:var(--surface);padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
@@ -296,6 +347,39 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
 
 <div id="debug-bar" style="display:none;position:fixed;bottom:0;left:0;right:0;background:#ff0000;color:white;font-size:11px;padding:6px;z-index:9999;font-family:monospace;word-break:break-all;"></div>
 
+<!-- AUTH OVERLAY -->
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box">
+    <div class="auth-logo">
+      <img src="https://blakeennis210-claude-git.github.io/The-Lab/wildcat.png" class="auth-logo-img" alt="wildcat">
+      <div class="auth-logo-name">THE<span>LAB</span></div>
+      <div class="auth-logo-slogan">INTENTIONAL REPS. UNDENIABLE RESULTS.</div>
+    </div>
+    <div class="auth-body">
+      <div class="auth-tabs">
+        <button class="auth-tab active" onclick="switchAuthTab('login')">LOGIN</button>
+        <button class="auth-tab" onclick="switchAuthTab('signup')">SIGN UP</button>
+      </div>
+      <div id="authForm">
+        <div class="auth-field">
+          <label class="auth-label">EMAIL</label>
+          <input class="auth-input" type="email" id="authEmail" placeholder="your@email.com">
+        </div>
+        <div class="auth-field" id="authNameField" style="display:none;">
+          <label class="auth-label">FULL NAME</label>
+          <input class="auth-input" type="text" id="authName" placeholder="First Last">
+        </div>
+        <div class="auth-field">
+          <label class="auth-label">PASSWORD</label>
+          <input class="auth-input" type="password" id="authPassword" placeholder="••••••••">
+        </div>
+        <button class="auth-btn" id="authSubmitBtn" onclick="handleAuth()">LOGIN</button>
+        <div id="authMsg" class="auth-msg" style="display:none;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <nav class="top-nav">
   <div style="display:flex;align-items:center;gap:10px;margin-right:16px;flex-shrink:0;">
   <img src="https://blakeennis210-claude-git.github.io/The-Lab/wildcat.png" width="38" height="38" style="flex-shrink:0;filter:invert(60%) sepia(80%) saturate(500%) hue-rotate(240deg) brightness(110%);" alt="wildcat">
@@ -306,6 +390,10 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
     <button class="nav-tab tab-handles" onclick="showTab('handles')">🔁 HANDLES<span class="tab-pip pip-orange"></span></button>
     <button class="nav-tab" onclick="showTab('workout')">📋 MY WORKOUT<span class="tab-pip pip-red" id="pip-workout" style="display:none"></span></button>
     <button class="nav-tab tab-dish" onclick="showTab('dish')">📡 DR. DISH<span class="tab-pip pip-blue"></span></button>
+    <button class="nav-tab" id="savedTab" onclick="showTab('saved')" style="display:none;">💾 SAVED</button>
+    <button class="nav-tab" id="highlightsTab" onclick="showTab('highlights')" style="display:none;">🎬 HIGHLIGHTS</button>
+    <button class="nav-tab" id="adminTab" onclick="showTab('admin')" style="display:none;">⚙️ ADMIN</button>
+    <button class="nav-tab" id="logoutTab" onclick="handleLogout()" style="display:none;color:#f87171;">LOGOUT</button>
   </div>
 </nav>
 <div style="background:var(--surface);border-bottom:1px solid rgba(147,51,234,.3);padding:10px 16px;text-align:center;">
@@ -460,6 +548,10 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
   </div>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+
 <script>
 // Safe onclick wrappers - defined first so HTML onclick attrs always work
 function generateSessionPlan(){ if(window._generateSessionPlan) window._generateSessionPlan(); else setTimeout(generateSessionPlan,100); }
@@ -570,6 +662,7 @@ const MIDDY_SPOTS = [
 // ══════════════════════════════════════════
 let selected = {};
 let activePicker = null; // tracks which inline picker is open
+let workoutPicker = null; // tracks which workout tab picker is open
 let activeCat = "all";
 let selectedHandles = new Set();
 let philWorkout = [];
@@ -861,12 +954,28 @@ function renderFullWorkout(){
       const finish = entry.finish;
       const fname = entry.finishName;
       if(finish){
+        const wpKey = key+'__wfinish__'+finish;
+        const wpOpen = workoutPicker === wpKey;
+        const pool = finish==='rim'?RIM_FINISHES:finish==='middy'?MIDDY_FINISHES:THREE_FINISHES;
         h += `<div class="w-finish-row">
           <span class="w-finish-label">FINISH →</span>
           <span class="finish-badge badge-${finish}">${finish.toUpperCase()}</span>
           ${fname?`<span class="finish-badge badge-${finish}" style="font-style:italic;">${fname}</span>`:''}
+          <button class="finish-rand ${wpOpen?'active-middy':''}" onclick="toggleWorkoutPicker('${wpKey}')">
+            ${wpOpen?'CLOSE':'SELECT'}
+          </button>
           <button class="finish-rand" onclick="randomWorkoutFinish('${key}','${finish}')">RANDOM</button>
         </div>`;
+        if(wpOpen){
+          h += `<div class="inline-picker">`;
+          pool.forEach(f => {
+            const isPicked = fname===f;
+            h += `<div class="picker-item ${isPicked?'picked':''}" onclick="applyWorkoutFinish('${key}','${finish}','${f.replace(/'/g,"&apos;")}')">
+              <span class="picker-dot dot-${finish==='rim'?'rim':finish==='middy'?'mid':'three'}"></span>${f}
+            </div>`;
+          });
+          h += `</div>`;
+        }
       } else {
         h += `<div class="w-finish-row">
           <span class="w-finish-label">FINISH →</span>
@@ -878,11 +987,27 @@ function renderFullWorkout(){
 
     } else if(mode === 'start'){
       const sname = entry.startName;
+      const spKey = key+'__wstart';
+      const spOpen = workoutPicker === spKey;
+      const startPool = START_OPTIONS[entry.catId] || [];
       h += `<div class="w-finish-row">
         <span class="w-finish-label" style="color:var(--accent2);">BEGIN WITH →</span>
         <span class="finish-badge badge-middy">${sname||'—'}</span>
+        <button class="finish-rand ${spOpen?'active-middy':''}" onclick="toggleWorkoutPicker('${spKey}')">
+          ${spOpen?'CLOSE':'SELECT'}
+        </button>
         <button class="finish-rand" onclick="randomWorkoutStart('${key}')">RANDOM</button>
       </div>`;
+      if(spOpen){
+        h += `<div class="inline-picker">`;
+        startPool.forEach(f => {
+          const isPicked = sname===f;
+          h += `<div class="picker-item ${isPicked?'picked-orange':''}" onclick="applyWorkoutStart('${key}','${f.replace(/'/g,"&apos;")}')">
+            <span class="picker-dot dot-start"></span>${f}
+          </div>`;
+        });
+        h += `</div>`;
+      }
 
     } else if(mode === 'spot'){
       const spotName = entry.spotName;
@@ -922,6 +1047,26 @@ function randomWorkoutFinish(key, type){
   if(!selected[key]) return;
   let pool = type==='rim'?RIM_FINISHES:type==='middy'?MIDDY_FINISHES:THREE_FINISHES;
   selected[key].finishName = pool[Math.floor(Math.random()*pool.length)];
+  renderFullWorkout();
+}
+
+function toggleWorkoutPicker(key){
+  workoutPicker = workoutPicker === key ? null : key;
+  renderFullWorkout();
+}
+
+function applyWorkoutFinish(key, type, name){
+  if(!selected[key]) return;
+  selected[key].finish = type;
+  selected[key].finishName = name;
+  workoutPicker = null;
+  renderFullWorkout();
+}
+
+function applyWorkoutStart(key, name){
+  if(!selected[key]) return;
+  selected[key].startName = name;
+  workoutPicker = null;
   renderFullWorkout();
 }
 
@@ -1871,6 +2016,326 @@ window._printSessionPlan = function() {
 }
 
 // ══════════════════════════════════════════
+// FIREBASE CONFIG & AUTH
+// ══════════════════════════════════════════
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyDsNpx3-iCE6U3yEe6xApsYy5R-PX86OzU",
+  authDomain: "the-lab-f96f3.firebaseapp.com",
+  projectId: "the-lab-f96f3",
+  storageBucket: "the-lab-f96f3.firebasestorage.app",
+  messagingSenderId: "929179228645",
+  appId: "1:929179228645:web:21b1eb7024e64835d1b70c",
+  measurementId: "G-RX2XZYCJ36"
+};
+
+const ADMIN_EMAIL = "blakeennis210@gmail.com"; // Your email - only you see admin tab
+
+let firebaseApp, db, auth, currentUser = null;
+let authMode = "login";
+
+function initFirebase(){
+  try {
+    firebaseApp = firebase.initializeApp(FIREBASE_CONFIG);
+    db = firebase.firestore();
+    auth = firebase.auth();
+    auth.onAuthStateChanged(handleAuthStateChange);
+    console.log("Firebase initialized");
+  } catch(e){ console.error("Firebase init error:", e); }
+}
+
+function handleAuthStateChange(user){
+  currentUser = user;
+  const overlay = document.getElementById("authOverlay");
+  if(user){
+    // Check if approved
+    db.collection("users").doc(user.uid).get().then(doc => {
+      if(doc.exists){
+        const data = doc.data();
+        if(data.status === "approved" || user.email === ADMIN_EMAIL){
+          overlay.style.display = "none";
+          showPlayerUI(user, data);
+        } else if(data.status === "pending"){
+          showAuthMsg("Your account is pending coach approval. Check back soon.", "pending");
+          auth.signOut();
+        } else {
+          showAuthMsg("Your account has been denied. Contact your coach.", "error");
+          auth.signOut();
+        }
+      } else {
+        overlay.style.display = "none";
+        showPlayerUI(user, {});
+      }
+    });
+  } else {
+    overlay.style.display = "flex";
+    hidePlayerUI();
+  }
+}
+
+function showPlayerUI(user, data){
+  // Show player tabs
+  document.getElementById("savedTab").style.display = "block";
+  document.getElementById("highlightsTab").style.display = "block";
+  document.getElementById("logoutTab").style.display = "block";
+  if(user.email === ADMIN_EMAIL){
+    document.getElementById("adminTab").style.display = "block";
+  }
+  loadSavedWorkouts();
+  loadHighlights();
+  if(user.email === ADMIN_EMAIL) loadAdminData();
+}
+
+function hidePlayerUI(){
+  ["savedTab","highlightsTab","adminTab","logoutTab"].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.style.display = "none";
+  });
+}
+
+function switchAuthTab(mode){
+  authMode = mode;
+  document.querySelectorAll(".auth-tab").forEach((t,i) => {
+    t.classList.toggle("active", (mode === "login" && i===0)||(mode === "signup" && i===1));
+  });
+  document.getElementById("authSubmitBtn").textContent = mode === "login" ? "LOGIN" : "SIGN UP";
+  document.getElementById("authNameField").style.display = mode === "signup" ? "block" : "none";
+  document.getElementById("authMsg").style.display = "none";
+}
+
+function handleAuth(){
+  const email = document.getElementById("authEmail").value.trim();
+  const password = document.getElementById("authPassword").value;
+  const name = document.getElementById("authName").value.trim();
+  const btn = document.getElementById("authSubmitBtn");
+
+  if(!email || !password){ showAuthMsg("Please enter email and password.", "error"); return; }
+  btn.disabled = true;
+  btn.textContent = authMode === "login" ? "LOGGING IN..." : "SIGNING UP...";
+
+  if(authMode === "login"){
+    auth.signInWithEmailAndPassword(email, password)
+      .catch(e => {
+        showAuthMsg(e.message, "error");
+        btn.disabled = false;
+        btn.textContent = "LOGIN";
+      });
+  } else {
+    if(!name){ showAuthMsg("Please enter your name.", "error"); btn.disabled=false; btn.textContent="SIGN UP"; return; }
+    auth.createUserWithEmailAndPassword(email, password)
+      .then(cred => {
+        const status = email === ADMIN_EMAIL ? "approved" : "pending";
+        return db.collection("users").doc(cred.user.uid).set({
+          email, name, status, createdAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+      })
+      .then(() => {
+        if(email !== ADMIN_EMAIL){
+          showAuthMsg("Account created! Waiting for coach approval.", "pending");
+          auth.signOut();
+        }
+      })
+      .catch(e => {
+        showAuthMsg(e.message, "error");
+        btn.disabled = false;
+        btn.textContent = "SIGN UP";
+      });
+  }
+}
+
+function showAuthMsg(msg, type){
+  const el = document.getElementById("authMsg");
+  el.textContent = msg;
+  el.className = "auth-msg " + type;
+  el.style.display = "block";
+}
+
+function handleLogout(){
+  auth.signOut();
+  showTab("bag");
+}
+
+// ══════════════════════════════════════════
+// SAVED WORKOUTS
+// ══════════════════════════════════════════
+function saveCurrentWorkout(){
+  if(!currentUser){ alert("Please log in to save workouts."); return; }
+  if(workoutOrder.length === 0){ alert("No moves in your workout to save."); return; }
+  const name = prompt("Name this workout:") || ("Workout " + new Date().toLocaleDateString());
+  const workoutData = {
+    name,
+    moves: workoutOrder.map(key => {
+      const e = selected[key];
+      if(!e) return null;
+      return { catId: e.catId, skill: e.skill, mode: e.mode, finish: e.finish, finishName: e.finishName, startName: e.startName, spotName: e.spotName };
+    }).filter(Boolean),
+    savedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    userId: currentUser.uid
+  };
+  db.collection("users").doc(currentUser.uid).collection("workouts").add(workoutData)
+    .then(() => { alert("Workout saved!"); loadSavedWorkouts(); })
+    .catch(e => alert("Error saving: " + e.message));
+}
+
+function loadSavedWorkouts(){
+  if(!currentUser) return;
+  const list = document.getElementById("savedWorkoutsList");
+  if(!list) return;
+  list.innerHTML = "<div style='color:var(--muted);font-size:13px;'>Loading...</div>";
+  db.collection("users").doc(currentUser.uid).collection("workouts")
+    .orderBy("savedAt","desc").limit(20).get()
+    .then(snap => {
+      if(snap.empty){ list.innerHTML = "<div style='text-align:center;padding:60px 20px;color:var(--muted);'><div style='font-size:40px;margin-bottom:12px;'>💾</div><div style='font-family:monospace;font-size:10px;'>NO SAVED WORKOUTS YET</div></div>"; return; }
+      let h = "";
+      snap.forEach(doc => {
+        const d = doc.data();
+        const date = d.savedAt ? new Date(d.savedAt.seconds*1000).toLocaleDateString() : "—";
+        h += '<div class="saved-card">';
+        h += '<div class="saved-card-name">' + d.name + '</div>';
+        h += '<div class="saved-card-meta">' + (d.moves||[]).length + ' MOVES · SAVED ' + date + '</div>';
+        h += '<div class="saved-card-actions">';
+        h += '<button class="btn btn-purple btn-sm" data-action="load" data-wid="'+doc.id+'">LOAD</button>';
+        h += '<button class="btn btn-ghost btn-sm" data-action="delete" data-wid="'+doc.id+'">DELETE</button>';
+        h += '</div></div>';
+      });
+      list.innerHTML = h;
+    });
+}
+
+// Event delegation for saved workout and admin buttons
+document.addEventListener('click', function(e){
+  const btn = e.target.closest('[data-action]');
+  if(!btn) return;
+  const action = btn.dataset.action;
+  const wid = btn.dataset.wid;
+  const uid = btn.dataset.uid;
+  if(action==='load' && wid) loadSavedWorkout(wid);
+  if(action==='delete' && wid) deleteSavedWorkout(wid);
+  if(action==='approve' && uid) approvePlayer(uid);
+  if(action==='deny' && uid) denyPlayer(uid);
+});
+
+function loadSavedWorkout(docId){
+  if(!currentUser) return;
+  db.collection("users").doc(currentUser.uid).collection("workouts").doc(docId).get()
+    .then(doc => {
+      if(!doc.exists) return;
+      const d = doc.data();
+      selected = {}; workoutOrder = [];
+      (d.moves||[]).forEach(m => {
+        const key = m.catId+"||"+m.skill;
+        selected[key] = { catId:m.catId, skill:m.skill, mode:m.mode||getMode(m.catId), finish:m.finish||null, finishName:m.finishName||null, startName:m.startName||null, spotName:m.spotName||null };
+        workoutOrder.push(key);
+      });
+      showTab("workout");
+      renderFullWorkout();
+      renderBagContent();
+      updatePip();
+      alert("Workout loaded!");
+    });
+}
+
+function deleteSavedWorkout(docId){
+  if(!confirm("Delete this workout?")) return;
+  db.collection("users").doc(currentUser.uid).collection("workouts").doc(docId).delete()
+    .then(() => loadSavedWorkouts());
+}
+
+// ══════════════════════════════════════════
+// HIGHLIGHTS
+// ══════════════════════════════════════════
+function loadHighlights(){
+  if(!currentUser) return;
+  const list = document.getElementById("highlightsList");
+  const sub = document.getElementById("highlightsSub");
+  if(!list) return;
+  db.collection("highlights").where("playerEmail","==",currentUser.email)
+    .orderBy("addedAt","desc").get()
+    .then(snap => {
+      if(snap.empty){ list.innerHTML = "<div style='text-align:center;padding:60px 20px;color:var(--muted);'><div style='font-size:40px;margin-bottom:12px;'>🎬</div><div style='font-family:monospace;font-size:10px;'>YOUR COACH WILL ADD HIGHLIGHTS HERE</div></div>"; return; }
+      if(sub) sub.textContent = snap.size + " CLIPS IN YOUR LIBRARY";
+      let h = "";
+      snap.forEach(doc => {
+        const d = doc.data();
+        const date = d.addedAt ? new Date(d.addedAt.seconds*1000).toLocaleDateString() : "—";
+        h += '<div class="highlight-card">';
+        h += '<div class="highlight-title">' + d.title + '</div>';
+        h += '<div class="highlight-meta">ADDED ' + date + (d.notes ? " · " + d.notes : "") + '</div>';
+        h += '<a class="highlight-link" href="' + d.link + '" target="_blank">▶ OPEN IN DRIVE</a>';
+        h += '</div>';
+      });
+      list.innerHTML = h;
+    })
+    .catch(() => {
+      list.innerHTML = "<div style='color:var(--muted);font-size:13px;'>Loading highlights...</div>";
+    });
+}
+
+function addHighlight(){
+  const playerEmail = document.getElementById("hlPlayerEmail").value.trim();
+  const title = document.getElementById("hlTitle").value.trim();
+  const link = document.getElementById("hlLink").value.trim();
+  const notes = document.getElementById("hlNotes").value.trim();
+  const msg = document.getElementById("hlMsg");
+  if(!playerEmail||!title||!link){ msg.className="auth-msg error"; msg.textContent="Fill in player email, title and link."; msg.style.display="block"; return; }
+  db.collection("highlights").add({
+    playerEmail, title, link, notes,
+    addedBy: currentUser.email,
+    addedAt: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(() => {
+    msg.className="auth-msg success"; msg.textContent="Highlight added!"; msg.style.display="block";
+    document.getElementById("hlPlayerEmail").value="";
+    document.getElementById("hlTitle").value="";
+    document.getElementById("hlLink").value="";
+    document.getElementById("hlNotes").value="";
+  }).catch(e => { msg.className="auth-msg error"; msg.textContent=e.message; msg.style.display="block"; });
+}
+
+// ══════════════════════════════════════════
+// ADMIN
+// ══════════════════════════════════════════
+function loadAdminData(){
+  // Pending players
+  db.collection("users").where("status","==","pending").get().then(snap => {
+    const list = document.getElementById("pendingPlayersList");
+    if(!list) return;
+    if(snap.empty){ list.innerHTML="<div style='color:var(--muted);font-size:13px;'>No pending players</div>"; return; }
+    let h="";
+    snap.forEach(doc => {
+      const d = doc.data();
+      h += '<div class="admin-player-row">';
+      h += '<div class="admin-player-email">' + d.name + '<br><span style="font-size:11px;color:var(--muted);">' + d.email + '</span></div>';
+      h += '<span class="admin-player-status status-pending">PENDING</span>';
+        h += '<button class="btn btn-green btn-sm" data-action="approve" data-uid="'+doc.id+'">APPROVE</button>';
+        h += '<button class="btn btn-ghost btn-sm" data-action="deny" data-uid="'+doc.id+'">DENY</button>';
+      h += '</div>';
+    });
+    list.innerHTML = h;
+  });
+  // Approved players
+  db.collection("users").where("status","==","approved").get().then(snap => {
+    const list = document.getElementById("approvedPlayersList");
+    if(!list) return;
+    if(snap.empty){ list.innerHTML="<div style='color:var(--muted);font-size:13px;'>No approved players yet</div>"; return; }
+    let h="";
+    snap.forEach(doc => {
+      const d = doc.data();
+      h += '<div class="admin-player-row">';
+      h += '<div class="admin-player-email">' + d.name + '<br><span style="font-size:11px;color:var(--muted);">' + d.email + '</span></div>';
+      h += '<span class="admin-player-status status-approved">APPROVED</span>';
+      h += '</div>';
+    });
+    list.innerHTML = h;
+  });
+}
+
+function approvePlayer(uid){
+  db.collection("users").doc(uid).update({status:"approved"}).then(() => loadAdminData());
+}
+function denyPlayer(uid){
+  db.collection("users").doc(uid).update({status:"denied"}).then(() => loadAdminData());
+}
+
+// ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 window.onerror = function(msg, src, line, col, err){
@@ -1881,6 +2346,7 @@ window.onerror = function(msg, src, line, col, err){
 
 function init(){
   try {
+    initFirebase();
     renderBagSidebar();
     renderBagContent();
     renderHandles();
@@ -1897,6 +2363,54 @@ if(document.readyState === 'loading'){
   init();
 }
 </script>
+
+<!-- SAVED WORKOUTS PAGE -->
+<div class="page" id="page-saved">
+  <div style="padding:22px;max-width:700px;margin:0 auto;">
+    <div class="sec-header">
+      <div><div class="sec-title" style="color:var(--accent2);">💾 SAVED WORKOUTS</div>
+      <div class="sec-sub">YOUR PERSONAL WORKOUT HISTORY</div></div>
+      <button class="btn btn-purple" onclick="saveCurrentWorkout()">+ SAVE CURRENT</button>
+    </div>
+    <div id="savedWorkoutsList"><div style="text-align:center;padding:60px 20px;color:var(--muted);"><div style="font-size:40px;margin-bottom:12px;">💾</div><div style="font-family:'Space Mono',monospace;font-size:10px;">NO SAVED WORKOUTS YET</div></div></div>
+  </div>
+</div>
+
+<!-- HIGHLIGHTS PAGE -->
+<div class="page" id="page-highlights">
+  <div style="padding:22px;max-width:700px;margin:0 auto;">
+    <div class="sec-header">
+      <div><div class="sec-title" style="color:var(--accent2);">🎬 MY HIGHLIGHTS</div>
+      <div class="sec-sub" id="highlightsSub">YOUR FILM LIBRARY</div></div>
+    </div>
+    <div id="highlightsList"><div style="text-align:center;padding:60px 20px;color:var(--muted);"><div style="font-size:40px;margin-bottom:12px;">🎬</div><div style="font-family:'Space Mono',monospace;font-size:10px;">YOUR COACH WILL ADD HIGHLIGHTS HERE</div></div></div>
+  </div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="page-admin">
+  <div style="padding:22px;max-width:700px;margin:0 auto;">
+    <div class="sec-header">
+      <div><div class="sec-title" style="color:var(--accent2);">⚙️ ADMIN</div>
+      <div class="sec-sub">PLAYER MANAGEMENT</div></div>
+    </div>
+    <!-- Player approval -->
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent2);margin-bottom:10px;">PENDING APPROVAL</div>
+    <div id="pendingPlayersList"><div style="color:var(--muted);font-size:13px;">No pending players</div></div>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent2);margin:20px 0 10px;">APPROVED PLAYERS</div>
+    <div id="approvedPlayersList"><div style="color:var(--muted);font-size:13px;">No approved players yet</div></div>
+    <!-- Add highlight for player -->
+    <div style="margin-top:24px;background:var(--card);border:1px solid var(--border);border-radius:4px;padding:16px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--accent2);margin-bottom:12px;">ADD HIGHLIGHT FOR PLAYER</div>
+      <div class="auth-field"><label class="auth-label">PLAYER EMAIL</label><input class="auth-input" type="text" id="hlPlayerEmail" placeholder="player@email.com"></div>
+      <div class="auth-field"><label class="auth-label">TITLE</label><input class="auth-input" type="text" id="hlTitle" placeholder="vs Lincoln — Game 3 Highlights"></div>
+      <div class="auth-field"><label class="auth-label">GOOGLE DRIVE LINK</label><input class="auth-input" type="text" id="hlLink" placeholder="https://drive.google.com/..."></div>
+      <div class="auth-field"><label class="auth-label">NOTES (optional)</label><input class="auth-input" type="text" id="hlNotes" placeholder="3rd quarter, plays 12-18"></div>
+      <button class="auth-btn" style="margin-top:8px;" onclick="addHighlight()">ADD HIGHLIGHT</button>
+      <div id="hlMsg" style="display:none;" class="auth-msg"></div>
+    </div>
+  </div>
+</div>
 
 <!-- SESSION PLAN MODAL -->
 <div class="panel-overlay" id="sessionPlanPanel">
