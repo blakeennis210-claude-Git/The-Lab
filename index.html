@@ -427,7 +427,7 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
   <div style="flex:1;padding:8px 0;">
     <div class="menu-section-label">TRAIN</div>
     <button class="menu-item active" id="menu-bag" onclick="menuNav('bag')">
-      <span class="menu-icon">🥊</span><span class="menu-label">Bag Work</span>
+      <span class="menu-icon">🥊</span><span class="menu-label">Bag</span>
       <span class="tab-pip pip-red menu-pip" id="pip-bag" style="display:none;margin-left:auto;"></span>
     </button>
     <button class="menu-item" id="menu-handles" onclick="menuNav('handles')">
@@ -642,41 +642,81 @@ const THREE_FINISHES = [
 ];
 
 const CATEGORIES = [
+  // ── LIVE DRIBBLE BASIC ──
+  {id:'ldb',icon:'🏃',name:'Live Dribble Basic',desc:'Foundation live dribble moves',mode:'finish',skills:['Simple Cross','Blow By','Push Cross','In-Out','In and Out','Iverson Cross']},
 
-  // ── BAG WORK SUB-CATEGORIES ──
-  {id:'ldb',icon:'🏃',name:'Live Dribble Basic',desc:'Foundation live dribble moves',group:'bag',skills:['Simple Cross','Blow By','Push Cross','In-Out','In and Out','Iverson Cross']},
-  {id:'ldtween',icon:'🔀',name:'Live Dribble Tween',desc:'Between-legs dribble moves',group:'bag',skills:['Tween Blow By','Tween Cross']},
-  {id:'counters',icon:'🔄',name:'Counters',desc:'Counter moves to defensive pressure',group:'bag',skills:['Hesi Counter','Side Step Counter','Push Cross Counter','Anchor Step Counter','Spin']},
-  {id:'pausepull',icon:'⏸',name:'Pause & Pull Up',desc:'Pause-based attacks',group:'bag',skills:['1-2 Pull Up','Quick Pause with Step on Defense']},
-  {id:'floats',icon:'🌊',name:'Live Dribble Float',desc:'Float dribble moves',group:'bag',skills:['Push Float','Cross Float','Tween Float','BTB Float']},
-  {id:'wraps',icon:'🌀',name:'Live Dribble Wrap',desc:'Wrap-based attacks',group:'bag',skills:['In-Out to Wrap','Downhill Wrap','Wrap to Tween Cross','Wrap to Inverted Drag','Wrap to Harden Step Back']},
-  {id:'triple',icon:'⚡',name:'Triple Threat',desc:'Triple threat attack moves',group:'bag',skills:['Rip and Go','Rip to 1-2 Pull Up','Sweep and Go','Sweep to 1-2 Pull Up','Pump Fake and Go','Pump Fake Side Push Out Dribble and Three','Jab and Go','Shimmy Jab','Jab and Three','Jab Pump Fake and Go']},
-  {id:'bump',icon:'💥',name:'Bump Finishes',desc:'Bump-based finishes',group:'bag',skills:['Bump to Veer Bump','Bump to Euro','Bump to Pinoy','Bump to Push Shot']},
-  {id:'cop',icon:'🔃',name:'Change of Pace',desc:'Tempo manipulation moves',group:'bag',skills:['Level Change','Speed Change','Hesi','Come Get This','Rebound Act Like Pulling Out and Attack']},
-  {id:'aggressive',icon:'🛡',name:'Dealing With Aggressive Defenders',desc:'Counter aggressive defense',group:'bag',skills:['Retreat and Attack','Give and Go','Use Screen','DHO and Go','Slap Hands to Prevent Steals']},
-  {id:'jail',icon:'🔒',name:'Put in Jail',desc:'Put defender in jail moves',group:'bag',skills:['To Floater','To Escape Dribble','Probe and Find Rolling Screener','To Inside Hand Finish','To In-Out Euro']},
+  // ── LIVE DRIBBLE TWEEN ──
+  {id:'ldtween',icon:'🔀',name:'Live Dribble Tween',desc:'Between-legs dribble moves',mode:'finish',skills:['Tween Blow By','Tween Cross']},
 
-  // ── ALL OTHER ORIGINAL CATEGORIES (unchanged) ──
-  {id:'power',icon:'💥',name:'Power Dribble',desc:'Power dribble counters',skills:['Bump to Floater','Bump to Layup','To Swing Step','To Laylah Spin','To Euro']},
-  {id:'prohop',icon:'🐇',name:'Pro Hop',desc:'Pro hop variations',skills:['To Floater','To Step Through','Pump Bump and Shoot','To Reverse Pivot','To Slide By']},
-  {id:'traffic',icon:'🚦',name:'Finish in Traffic',desc:'Contact finishes',skills:['Pinoy Step','Euro','Power Dribble Euro','Tuck Bump','Veer Bump','Swing Step High Pickup','Pro Hop','Tuck Swing Step','Low Pickup Swing Step']},
-  {id:'downhill',icon:'⬇️',name:'Downhill Attacks',desc:'Transition attacks',skills:['Euro','In-Out','In-Out Euro','Stutter Step','Cross Jab']},
-  {id:'space',icon:'🔭',name:'Create Space',desc:'Space-creating moves',skills:['Float','Quick Float','Bump to Step Back','Retreat to Attack','Spin and Seal']},
-  {id:'touch',icon:'🤌',name:'Touch Finishes',desc:'Soft touch finishes',skills:['Two Foot Floater Both Hands','Downhill Runner','Across the Lane Runner','Inside Hand Scoop','Outside the Lane Hook','Wing Slot Drive Bank Floater']},
-  {id:'layups',icon:'🏀',name:'Layups',desc:'Layup variations',skills:['Normal Scoop','High Pickup','Same Foot','OG Reverse','Pinoy Reverse']},
-  {id:'stride',icon:'🦶',name:'Stride Stop',desc:'Stride stop counters',skills:['To Forward Pivot Hook / Floater','To Forward Pivot Shot','To Forward Pivot Up and Under','To Forward / Reverse Layup']},
-  {id:'crossovers',icon:'✂️',name:'Crossovers',desc:'Cross variations',skills:['Iverson Cross','Tween Cross','BTB Cross','In/Out Cross','Scissor Cross','Float Crossover','Push Cross']},
-  {id:'cutoff',icon:'🚫',name:'Cut Off Counters',desc:'Beat the cut off',skills:['BTB and Go','Anchor Step and Go','Scissor and Go','Ball on Foot to Wrap and Go','Punch and Scissor']},
-  {id:'pressure',icon:'🔥',name:'Dealing With Pressure',desc:'Beat the press',skills:['Cross Step Pound to Scissor Attack','Retreat and Attack']},
-  {id:'live',icon:'⚡',name:'Live Dribble Attack',desc:'Off the catch attacks',skills:['Quick Blow By','Float and Go','Float and Cross','Double Tween']},
-  {id:'speed',icon:'🏎️',name:'Changing Speed',desc:'Tempo manipulation',skills:['Slow Ball on Foot to Fast Ball on Foot','Push Out Float and Cross','Slow Tween Float to Fast Cross Tween and Go']},
-  {id:'stops',icon:'🛑',name:'Speed Stops',desc:'Stop and go attacks',skills:['BTB Speed Stop','Punch']},
-  {id:'middy',icon:'🎯',name:'Short Middy Moves',desc:'10–15 feet pull-up game',skills:['Hop Mini Fade','Half Spin Mini Fade','1-2 Mini Fade','Ball on Foot Forward Pivot','BTB Step Back','Crossover Step Back','Punch Middy','Ball on Foot Step Back','Ball on Foot Tween Hop Back']}
+  // ── COUNTERS ──
+  {id:'counters',icon:'🔄',name:'Counters',desc:'Counter moves — optional beginning move',mode:'optional-start',skills:['Hesi Counter','Side Step Counter','Push Cross Counter','Anchor Step Counter','Spin']},
+
+  // ── LIVE DRIBBLE FLOAT ──
+  {id:'floats',icon:'🌊',name:'Live Dribble Float',desc:'Float dribble moves',mode:'finish',skills:['Push Out Float','Cross Float','Tween Float','BTB Float']},
+
+  // ── LIVE DRIBBLE WRAP ──
+  {id:'wraps',icon:'🌀',name:'Live Dribble Wrap',desc:'Wrap-based attacks',mode:'finish',skills:['In-Out to Wrap','Downhill Wrap','Wrap to Tween Cross','Wrap to Inverted Drag','Wrap to Harden Step Back']},
+
+  // ── TRIPLE THREAT ──
+  {id:'triple',icon:'⚡',name:'Triple Threat',desc:'Triple threat attack moves',mode:'finish',skills:['Rip and Go','Rip to 1-2 Pull Up','Sweep and Go','Sweep to 1-2 Pull Up','Pump Fake and Go','Pump Fake Side Push Out Dribble and Three','Jab and Go','Shimmy Jab','Jab and Three','Jab Pump Fake and Go']},
+
+  // ── BUMP FINISHES ──
+  {id:'bump',icon:'💥',name:'Bump Finishes',desc:'Bump-based finishes',mode:'start',skills:['Bump to Veer Bump','Bump to Euro','Bump to Pinoy','Bump to Push Shot']},
+
+  // ── CHANGE OF PACE ──
+  {id:'cop',icon:'🔃',name:'Change of Pace',desc:'Tempo manipulation moves',mode:'finish',skills:['Level Change','Speed Change','Hesi','Come Get This','Rebound Act Like Pulling Out and Attack']},
+
+  // ── PUT IN JAIL ──
+  {id:'jail',icon:'🔒',name:'Put in Jail',desc:'Put defender in jail moves',mode:'start',skills:['To Floater','To Escape Dribble','Probe and Find Rolling Screener','To Inside Hand Finish','To In-Out Euro']},
+
+  // ── POWER DRIBBLE ──
+  {id:'power',icon:'💪',name:'Power Dribble',desc:'Power dribble counters',mode:'start',skills:['Bump to Floater','Bump to Layup','To Swing Step','To Laylah Spin','To Euro']},
+
+  // ── PRO HOP ──
+  {id:'prohop',icon:'🐇',name:'Pro Hop',desc:'Pro hop variations',mode:'start',skills:['To Floater','To Step Through','Pump Bump and Shoot','To Reverse Pivot','To Slide By']},
+
+  // ── FINISH IN TRAFFIC ──
+  {id:'traffic',icon:'🚦',name:'Finish in Traffic',desc:'Contact finishes',mode:'start',skills:['Pinoy Step','Euro','Power Dribble Euro','Tuck Bump','Veer Bump','Pro Hop','Quick Pause with Step on Defense','Tuck Swing Step','Low Pickup Swing Step','High Pickup Swing Step']},
+
+  // ── DOWNHILL ATTACKS ──
+  {id:'downhill',icon:'⬇️',name:'Downhill Attacks',desc:'Transition attacks',mode:'start',skills:['Euro','In-Out','In-Out Euro','Stutter Step','Cross Jab']},
+
+  // ── CREATE SPACE ──
+  {id:'space',icon:'🔭',name:'Create Space',desc:'Space-creating moves',mode:'none',skills:['Float','Quick Float','Bump to Step Back / Side Step','Retreat to Attack','Spin and Seal']},
+
+  // ── TOUCH FINISHES ──
+  {id:'touch',icon:'🤌',name:'Touch Finishes',desc:'Soft touch finishes',mode:'start',skills:['Two Foot Floaters with Both Hands','Downhill Runners','Across the Lane Runners','Inside Hand Scoop','Outside the Lane Hook','Wing / Slot Drive Bank Floater']},
+
+  // ── LAYUPS ──
+  {id:'layups',icon:'🏀',name:'Layups',desc:'Layup variations',mode:'start',skills:['Normal Scoop','High Pickup','Same Foot','OG Reverse','Pinoy Reverse']},
+
+  // ── STRIDE STOP ──
+  {id:'stride',icon:'🦶',name:'Stride Stop',desc:'Stride stop counters',mode:'start',skills:['To Forward Pivot Hook / Floater','To Forward Pivot Shot','To Forward Pivot Up and Under','To Forward / Reverse Layup']},
+
+  // ── CROSSOVERS ──
+  {id:'crossovers',icon:'✂️',name:'Crossovers',desc:'Cross variations',mode:'finish',skills:['Iverson Cross','Tween Cross','BTB Cross','In / Out Cross','Scissor Cross','Float Crossover','Push Cross']},
+
+  // ── CUT OFF COUNTERS ──
+  {id:'cutoff',icon:'🚫',name:'Cut Off Counters',desc:'Beat the cut off',mode:'finish',skills:['BTB and Go','Anchor Step and Go','Scissor and Go','Ball on Foot to Wrap and Go','Punch and Scissor']},
+
+  // ── DEALING WITH PRESSURE ──
+  {id:'pressure',icon:'🔥',name:'Dealing With Pressure',desc:'Beat aggressive defense',mode:'none',skills:['Cross Step Pound to Scissor Attack','Retreat and Attack','Give and Go','Use Screen','DHO and Go','Slap Hands to Prevent Steals']},
+
+  // ── LIVE DRIBBLE ATTACK ──
+  {id:'live',icon:'⚡',name:'Live Dribble Attack',desc:'Off the catch attacks',mode:'finish',skills:['Quick Blow By','Float and Go','Float and Cross','Double Tween']},
+
+  // ── CHANGING SPEED ──
+  {id:'speed',icon:'🏎️',name:'Changing Speed',desc:'Tempo manipulation',mode:'none',skills:['Slow Ball on Foot to Fast Ball on Foot','Push Out Float and Cross','(Slow) Tween Float to (Fast) Cross Tween and Go']},
+
+  // ── SPEED STOPS ──
+  {id:'stops',icon:'🛑',name:'Speed Stops',desc:'Stop and go attacks',mode:'finish',skills:['BTB Speed Stop','Punch']},
+
+  // ── SHORT MIDDY MOVES ──
+  {id:'middy',icon:'🎯',name:'Short Middy Moves',desc:'10–15 feet pull-up game',mode:'spot',skills:['Hop Mini Fade','Half Spin Mini Fade','1-2 Mini Fade','Ball on Foot Forward Pivot','BTB Step Back','Crossover Step Back','Punch Middy','Ball on Foot Step Back','Ball on Foot / Tween Hop Back']}
 ];
 
-// Bag Work sub-categories (shown when Bag Work selected)
-const BAG_CATS = CATEGORIES.filter(c => c.group === 'bag');
-// All categories for workout selection
+
+const BAG_CATS = CATEGORIES; // all categories are under Bag
 const ALL_CATS = CATEGORIES;
 
 const HANDLE_SECTIONS = [
@@ -751,7 +791,15 @@ let philWorkout = [];
 let workoutOrder = [];
 
 function getKey(catId, skill){ return catId+"||" +skill; }
-function getMode(catId){ return START_CATS.has(catId)?"start":SPOT_CATS.has(catId)?"spot":"finish"; }
+function getMode(catId){
+  const cat = ALL_CATS.find(c=>c.id===catId);
+  if(!cat) return 'finish';
+  const m = cat.mode;
+  if(m==='start'||m==='optional-start') return 'start';
+  if(m==='spot') return 'spot';
+  if(m==='none') return 'none';
+  return 'finish';
+}
 
 // ══════════════════════════════════════════
 // TAB ROUTING
@@ -798,7 +846,7 @@ function showTab(tab){
   const mi = document.getElementById('menu-'+tab);
   if(mi) mi.classList.add('active');
   // Update section label in nav
-  const labels = {bag:'BAG WORK',handles:'HANDLES',workout:'MY WORKOUT',dish:'DR. DISH',saved:'SAVED',highlights:'HIGHLIGHTS',admin:'ADMIN'};
+  const labels = {bag:'BAG',handles:'HANDLES',workout:'MY WORKOUT',dish:'DR. DISH',saved:'SAVED',highlights:'HIGHLIGHTS',admin:'ADMIN'};
   const cs = document.getElementById('currentSection');
   if(cs) cs.textContent = labels[tab]||'';
   if(tab==='workout') renderFullWorkout();
@@ -811,14 +859,14 @@ function showTab(tab){
 // BAG WORK
 // ══════════════════════════════════════════
 // Track which top-level section we're in
-let bagMode = true; // true = showing bag sub-cats, false = showing all cats
+let bagMode = true; // always true — all categories are under Bag
 
 function renderBagSidebar(){
   const sb = document.getElementById('bag-sidebar');
   const cats = bagMode ? BAG_CATS : ALL_CATS.filter(c=>!c.group);
   const total = cats.reduce((a,c)=>a+c.skills.length,0);
-  let h = `<div class="sidebar-label">${bagMode ? 'BAG WORK' : 'ALL SKILLS'}</div>`;
-  h += `<button class="cat-btn active" data-cat="all" onclick="selectCat('all',this)"><span class="ci">📋</span><div><div class="cn">All ${bagMode?'Bag Work':'Skills'}</div><div class="cc">${total} moves</div></div></button>`;
+  let h = `<div class="sidebar-label">BAG</div>`;
+  h += `<button class="cat-btn active" data-cat="all" onclick="selectCat('all',this)"><span class="ci">📋</span><div><div class="cn">All Skills</div><div class="cc">${total} moves</div></div></button>`;
   h += `<div class="sidebar-divider"></div>`;
   cats.forEach(c=>{
     h += `<button class="cat-btn" data-cat="${c.id}" onclick="selectCat('${c.id}',this)"><span class="ci">${c.icon}</span><div><div class="cn">${c.name}</div><div class="cc">${c.skills.length} moves</div></div></button>`;
@@ -929,6 +977,9 @@ function renderBagContent(){
             });
             h += `</div>`;
           }
+        } else if(catMode==='none'){
+          // No start or finish needed - just reps
+          h += `<div style="margin-top:6px;font-family:'Space Mono',monospace;font-size:8px;color:var(--muted);letter-spacing:1px;">REPS ONLY — NO FINISH REQUIRED</div>`;
         } else if(catMode==='spot'){
           const spotName = entry.spotName;
           h += `<div style="margin-top:7px;">
@@ -1141,6 +1192,10 @@ function renderFullWorkout(){
         h += `</div>`;
       }
 
+    } else if(mode === 'none'){
+      h += `<div class="w-finish-row">
+        <span class="w-finish-label" style="color:var(--muted);">REPS ONLY</span>
+      </div>`;
     } else if(mode === 'spot'){
       const spotName = entry.spotName;
       h += `<div class="w-finish-row">
