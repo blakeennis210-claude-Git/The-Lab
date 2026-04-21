@@ -763,11 +763,33 @@ const START_CATS = new Set(["power","prohop","traffic","touch","layups","ldb","l
 const SPOT_CATS  = new Set(["middy"]);
 
 const START_OPTIONS = {
-  power:   ["Pound Dribble","Cross","Hesi","BTB","In-Out","Tween"],
-  prohop:  ["Live Dribble Attack","Catch and Go","Drive from Wing","Drive from Elbow","One Dribble","Pull Back and Attack"],
-  traffic: ["Pound into Paint","Drive Right","Drive Left","Elbow Attack","Baseline Drive","Middle Drive"],
-  touch:   ["Catch in Paint","Drive to Paint","Drop Step Entry","Post Feed","Baseline Drive","Wing Drive"],
-  layups:  ["Left Side Approach","Right Side Approach","Middle Drive","Baseline Drive","Catch at Block","Speed Dribble"],
+  // BEGIN WITH options for start-mode categories
+  power:     ["Simple Cross","Blow By","Push Cross","In-Out","Hesi","Tween Blow By","Tween Cross","Live Dribble Attack","Drive from Wing","Drive from Elbow","One Dribble Pull Back","Pound Dribble"],
+  prohop:    ["Simple Cross","Blow By","Push Cross","In-Out","Live Dribble Attack","Drive from Wing","Drive from Elbow","One Dribble","Catch and Go","Pull Back and Attack"],
+  traffic:   ["Simple Cross","Blow By","Push Cross","Drive Right","Drive Left","Elbow Attack","Baseline Drive","Middle Drive","Pound into Paint","Catch at Block","Wing Drive"],
+  touch:     ["Drive to Paint","Wing Drive","Baseline Drive","Elbow Attack","Middle Drive","Drop Step Entry","Post Feed","Catch in Paint"],
+  layups:    ["Left Side Approach","Right Side Approach","Middle Drive","Baseline Drive","Catch at Block","Speed Dribble","Wing Drive","Blow By"],
+  stride:    ["Simple Cross","Blow By","Push Cross","In-Out","Hesi","Live Dribble Attack","Drive from Wing","Speed Dribble"],
+  bump:      ["Simple Cross","Blow By","Push Cross","In-Out","Hesi","Tween","Pound into Paint","Drive Right","Drive Left"],
+  jail:      ["Simple Cross","Blow By","Push Cross","In-Out","In and Out","Tween Blow By","Hesi","Live Dribble Attack"],
+  downhill:  ["Fast Break","Outlet Pass","Secondary Break","Push on Make","Live Dribble Full Court","Drive from Wing"],
+  counters:  ["Simple Cross","Blow By","Push Cross","In-Out","Tween Blow By","Tween Cross","Push Out Float","Rip and Go","Jab and Go","Sweep and Go"],
+};
+
+// FINISH options for finish-mode categories (RIM / MIDDY / THREE)
+// These use the existing RIM_FINISHES / MIDDY_FINISHES / THREE_FINISHES pools
+// but we also define what specific finishes make sense per category
+const CATEGORY_FINISH_HINTS = {
+  ldb:       "RIM · MIDDY · THREE",
+  ldtween:   "RIM · MIDDY · THREE",
+  floats:    "RIM · MIDDY · THREE",
+  wraps:     "RIM · MIDDY",
+  triple:    "RIM · MIDDY · THREE",
+  cop:       "RIM · MIDDY · THREE",
+  crossovers:"RIM · MIDDY · THREE",
+  cutoff:    "RIM · MIDDY",
+  live:      "RIM · MIDDY",
+  stops:     "RIM · MIDDY · THREE",
 };
 
 const MIDDY_SPOTS = [
@@ -927,6 +949,8 @@ function renderBagContent(){
         if(catMode==='finish'){
           const finish = entry.finish||null;
           const fname = entry.finishName;
+          const finishHint = CATEGORY_FINISH_HINTS[cat.id] || 'RIM · MIDDY · THREE';
+          h += `<div style="font-family:'Space Mono',monospace;font-size:7px;color:var(--muted);margin-top:6px;letter-spacing:1px;">FINISH WITH</div>`;
           h += `<div class="finish-bar">
             <span class="finish-chip ${finish==='rim'?'active-rim':''}" onclick="setFinish('${key}','rim')">🏀 RIM</span>
             <span class="finish-chip ${finish==='middy'?'active-middy':''}" onclick="setFinish('${key}','middy')">📍 MIDDY</span>
