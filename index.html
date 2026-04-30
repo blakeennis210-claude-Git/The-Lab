@@ -736,6 +736,8 @@ const CATEGORIES = [
 
 const BAG_CATS = CATEGORIES; // all categories are under Bag
 const ALL_CATS = CATEGORIES;
+// Sort all skills alphabetically within each category
+CATEGORIES.forEach(cat => { cat.skills.sort((a,b) => a.localeCompare(b)); });
 
 const HANDLE_SECTIONS = [
   {id:'foundation',name:'Foundation Handles',color:'var(--accent2)',handles:[
@@ -2740,37 +2742,59 @@ function buildSkillsWorkout(players, focus, duration){
   const middyCats  = ['middy','stops','cop'];
   const threeCats  = ['triple','ldb','ldtween','floats','wraps','crossovers','cutoff','live'];
 
-  let catIds = [];
-  if(focus.includes('finishing')) catIds = [...catIds, ...finishCats];
-  if(focus.includes('middy'))     catIds = [...catIds, ...middyCats];
-  if(focus.includes('three'))     catIds = [...catIds, ...threeCats];
-  catIds = [...new Set(catIds)];
-
-  // Estimate moves based on duration (approx 5 min per move for players>1, 3 min for solo)
+  // Estimate moves based on duration
   const minsPerMove = players > 1 ? 5 : 3;
   const targetMoves = Math.max(3, Math.floor(duration / minsPerMove));
 
-  // Pick random skills from relevant cats
-  let pool = [];
-  catIds.forEach(cid => {
-    const cat = ALL_CATS.find(c=>c.id===cid);
-    if(cat) cat.skills.forEach(s => pool.push({catId:cid, skill:s}));
-  });
+  // Build separate pools per focus and pick evenly from each
+  const pools = {};
+  if(focus.includes('finishing')){
+    pools.finishing = [];
+    finishCats.forEach(cid => {
+      const cat = ALL_CATS.find(c=>c.id===cid);
+      if(cat) cat.skills.forEach(s => pools.finishing.push({catId:cid, skill:s}));
+    });
+  }
+  if(focus.includes('middy')){
+    pools.middy = [];
+    middyCats.forEach(cid => {
+      const cat = ALL_CATS.find(c=>c.id===cid);
+      if(cat) cat.skills.forEach(s => pools.middy.push({catId:cid, skill:s}));
+    });
+  }
+  if(focus.includes('three')){
+    pools.three = [];
+    threeCats.forEach(cid => {
+      const cat = ALL_CATS.find(c=>c.id===cid);
+      if(cat) cat.skills.forEach(s => pools.three.push({catId:cid, skill:s}));
+    });
+  }
 
-  const picked = shuffle(pool).slice(0, targetMoves);
+  // Distribute targetMoves evenly across selected focuses
+  const focusKeys = Object.keys(pools);
+  const perFocus = Math.ceil(targetMoves / focusKeys.length);
+  let picked = [];
+  focusKeys.forEach(fk => {
+    const shuffled = shuffle(pools[fk]).slice(0, perFocus);
+    // Tag each with its intended finish type
+    shuffled.forEach(item => item.assignedFinish = fk === 'finishing' ? 'rim' : fk === 'middy' ? 'middy' : 'three');
+    picked = [...picked, ...shuffled];
+  });
+  picked = shuffle(picked).slice(0, targetMoves);
 
   // Clear and build workout
   selected = {}; workoutOrder = [];
-  picked.forEach(({catId, skill}) => {
+  picked.forEach((item) => {
+    const {catId, skill} = item;
     const key = getKey(catId, skill);
     const mode = getMode(catId);
     selected[key] = {catId, skill, mode, finish:null, finishName:null, startName:null, spotName:null};
     workoutOrder.push(key);
-    // Auto-assign finish based on focus
+    // Auto-assign finish based on which pool this skill came from
     if(mode === 'finish'){
-      if(focus.includes('finishing')) { selected[key].finish='rim'; randomFinish(key,'rim'); }
-      else if(focus.includes('middy')) { selected[key].finish='middy'; randomFinish(key,'middy'); }
-      else if(focus.includes('three')) { selected[key].finish='three'; randomFinish(key,'three'); }
+      const assignedType = item.assignedFinish || (focus.includes('finishing')?'rim':focus.includes('middy')?'middy':'three');
+      selected[key].finish = assignedType;
+      randomFinish(key, assignedType);
     }
     if(mode === 'start') randomStart(key, catId);
     if(mode === 'spot')  randomSpot(key);
@@ -2818,11 +2842,6 @@ function buildDishWorkoutFromGen(players, focus, duration){
   showTab('dish');
   generateDishWorkout();
 }
-
-// Sort all category skills alphabetically
-CATEGORIES.forEach(cat => {
-  cat.skills.sort((a,b) => a.localeCompare(b));
-});
 
 // ══════════════════════════════════════════
 // INIT
