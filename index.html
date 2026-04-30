@@ -303,6 +303,24 @@ body{background:var(--bg);color:var(--text);font-family:'Barlow Condensed','Aria
 .status-approved{background:rgba(34,197,94,.1);color:#4ade80;border:1px solid rgba(34,197,94,.3);}
 .status-denied{background:rgba(239,68,68,.1);color:#f87171;border:1px solid rgba(239,68,68,.3);}
 
+/* ── GENERATE WORKOUT ── */
+.gen-question{font-family:'Bebas Neue','Arial Black',impact,sans-serif;font-size:20px;letter-spacing:2px;color:var(--text);margin-bottom:6px;}
+.gen-sub{font-family:'Space Mono','Courier New',monospace;font-size:9px;color:var(--muted);letter-spacing:1px;margin-bottom:18px;}
+.gen-option{width:100%;background:var(--card);border:1px solid var(--border2);color:var(--text);text-align:left;padding:14px 16px;margin-bottom:8px;border-radius:3px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:12px;font-family:'Barlow Condensed','Arial Narrow',arial,sans-serif;font-weight:700;font-size:15px;}
+.gen-option:hover{border-color:var(--accent2);background:rgba(147,51,234,.08);}
+.gen-option.selected{border-color:var(--accent2);background:rgba(147,51,234,.15);color:var(--accent2);}
+.gen-option .go-icon{font-size:20px;width:28px;text-align:center;flex-shrink:0;}
+.gen-option .go-check{margin-left:auto;font-size:14px;color:var(--accent2);opacity:0;}
+.gen-option.selected .go-check{opacity:1;}
+.gen-num-row{display:flex;gap:8px;flex-wrap:wrap;}
+.gen-num{width:48px;height:48px;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Bebas Neue','Arial Black',impact,sans-serif;font-size:22px;border-radius:3px;cursor:pointer;transition:all .15s;display:flex;align-items:center;justify-content:center;}
+.gen-num:hover{border-color:var(--accent2);}
+.gen-num.selected{border-color:var(--accent2);background:rgba(147,51,234,.15);color:var(--accent2);}
+.gen-duration{display:flex;gap:8px;flex-wrap:wrap;}
+.gen-dur-btn{padding:10px 18px;background:var(--card);border:1px solid var(--border2);color:var(--text);font-family:'Bebas Neue','Arial Black',impact,sans-serif;font-size:16px;letter-spacing:1px;border-radius:3px;cursor:pointer;transition:all .15s;}
+.gen-dur-btn:hover{border-color:var(--accent2);}
+.gen-dur-btn.selected{border-color:var(--accent2);background:rgba(147,51,234,.15);color:var(--accent2);}
+
 /* ── SESSION PLAN ── */
 .sp-card{background:var(--card);border:1px solid var(--border);border-radius:4px;margin-bottom:10px;overflow:hidden;}
 .sp-card-hdr{background:var(--surface);padding:10px 14px;display:flex;align-items:center;gap:10px;border-bottom:1px solid var(--border);}
@@ -889,6 +907,7 @@ function renderBagSidebar(){
   const total = cats.reduce((a,c)=>a+c.skills.length,0);
   let h = `<div class="sidebar-label">BAG</div>`;
   h += `<button class="cat-btn active" data-cat="all" onclick="selectCat('all',this)"><span class="ci">📋</span><div><div class="cn">All Skills</div><div class="cc">${total} moves</div></div></button>`;
+  h += `<button class="cat-btn" onclick="openGenerateWorkout()" style="background:rgba(147,51,234,.15);border-left:3px solid var(--accent2);"><span class="ci">⚡</span><div><div class="cn" style="color:var(--accent2);">Generate Workout</div><div class="cc">Auto-build session</div></div></button>`;
   h += `<div class="sidebar-divider"></div>`;
   cats.forEach(c=>{
     h += `<button class="cat-btn" data-cat="${c.id}" onclick="selectCat('${c.id}',this)"><span class="ci">${c.icon}</span><div><div class="cn">${c.name}</div><div class="cc">${c.skills.length} moves</div></div></button>`;
@@ -2554,6 +2573,258 @@ function denyPlayer(uid){
 }
 
 // ══════════════════════════════════════════
+// GENERATE WORKOUT
+// ══════════════════════════════════════════
+
+let genState = { step:0, players:null, type:null, focus:[], duration:null };
+
+function openGenerateWorkout(){
+  genState = { step:1, players:null, type:null, focus:[], duration:null };
+  document.getElementById('generatePanel').classList.add('open');
+  renderGenStep();
+}
+
+function closeGenerate(){
+  document.getElementById('generatePanel').classList.remove('open');
+}
+
+function renderGenStep(){
+  const body = document.getElementById('generateBody');
+  const stepLabel = document.getElementById('genStepLabel');
+  const nextBtn = document.getElementById('genNextBtn');
+  nextBtn.textContent = 'NEXT';
+  nextBtn.style.display = 'block';
+
+  if(genState.step === 1){
+    // How many players
+    stepLabel.textContent = 'STEP 1 OF 3';
+    let h = '<div class="gen-question">How many players?</div>';
+    h += '<div class="gen-sub">SELECTING WORKOUT LENGTH AND VOLUME</div>';
+    h += '<div class="gen-num-row">';
+    [1,2,3,4,5,6].forEach(n => {
+      h += `<div class="gen-num ${genState.players===n?'selected':''}" onclick="genSelect('players',${n})">${n}</div>`;
+    });
+    h += '</div>';
+    body.innerHTML = h;
+
+  } else if(genState.step === 2){
+    // What type
+    stepLabel.textContent = 'STEP 2 OF 3';
+    let h = '<div class="gen-question">What type of workout?</div>';
+    h += '<div class="gen-sub">SELECT ONE</div>';
+    const types = [
+      {id:'skills', icon:'🥊', label:'Skills', sub:'Bag work — finishing, middy, or threes'},
+      {id:'handles', icon:'🔁', label:'Handles', sub:'Ball handling — Phil Handy style'},
+      {id:'dish', icon:'📡', label:'Dr. Dish', sub:'Machine workout — shooting or finishing'},
+    ];
+    types.forEach(t => {
+      h += `<button class="gen-option ${genState.type===t.id?'selected':''}" onclick="genSelect('type','${t.id}')">
+        <span class="go-icon">${t.icon}</span>
+        <div><div>${t.label}</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;">${t.sub}</div></div>
+        <span class="go-check">✓</span>
+      </button>`;
+    });
+    body.innerHTML = h;
+
+  } else if(genState.step === 3){
+    stepLabel.textContent = 'STEP 3 OF 3';
+    nextBtn.textContent = 'GENERATE';
+
+    if(genState.type === 'skills'){
+      let h = '<div class="gen-question">What are you working on?</div>';
+      h += '<div class="gen-sub">SELECT ONE OR MORE</div>';
+      const focuses = [
+        {id:'finishing', icon:'🏀', label:'Finishing', sub:'Rim finishes — layups, floaters, contact'},
+        {id:'middy', icon:'📍', label:'Middy', sub:'10–20 feet pull-ups and reads'},
+        {id:'three', icon:'🎯', label:'Threes', sub:'Spot up, step back, off movement'},
+      ];
+      focuses.forEach(f => {
+        const sel = genState.focus.includes(f.id);
+        h += `<button class="gen-option ${sel?'selected':''}" onclick="genToggleFocus('${f.id}')">
+          <span class="go-icon">${f.icon}</span>
+          <div><div>${f.label}</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;">${f.sub}</div></div>
+          <span class="go-check">✓</span>
+        </button>`;
+      });
+      h += '<div class="gen-question" style="margin-top:16px;">Workout length?</div>';
+      h += '<div class="gen-duration">';
+      [15,30,45,60].forEach(d => {
+        h += `<div class="gen-dur-btn ${genState.duration===d?'selected':''}" onclick="genSelect('duration',${d})">${d} MIN</div>`;
+      });
+      h += '</div>';
+      body.innerHTML = h;
+
+    } else if(genState.type === 'handles'){
+      let h = '<div class="gen-question">Workout length?</div>';
+      h += '<div class="gen-sub">PHIL HANDY STYLE — PROGRESSIVE HANDLE WORK</div>';
+      h += '<div class="gen-duration">';
+      [15,30,45,60].forEach(d => {
+        h += `<div class="gen-dur-btn ${genState.duration===d?'selected':''}" onclick="genSelect('duration',${d})">${d} MIN</div>`;
+      });
+      h += '</div>';
+      body.innerHTML = h;
+
+    } else if(genState.type === 'dish'){
+      let h = '<div class="gen-question">What are you working on?</div>';
+      h += '<div class="gen-sub">SELECT ONE</div>';
+      const dishFocus = [
+        {id:'threes', icon:'🎯', label:'Threes', sub:'Catch and shoot, spot up, off movement'},
+        {id:'middy', icon:'📍', label:'Middy', sub:'Elbow pull-ups, step backs, reads'},
+        {id:'floaters', icon:'🌊', label:'Floaters & Runners', sub:'Touch finishes around the rim'},
+      ];
+      dishFocus.forEach(f => {
+        h += `<button class="gen-option ${genState.focus[0]===f.id?'selected':''}" onclick="genSelect('dishfocus','${f.id}')">
+          <span class="go-icon">${f.icon}</span>
+          <div><div>${f.label}</div><div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;">${f.sub}</div></div>
+          <span class="go-check">✓</span>
+        </button>`;
+      });
+      h += '<div class="gen-question" style="margin-top:16px;">Workout length?</div>';
+      h += '<div class="gen-duration">';
+      [20,30,45,60].forEach(d => {
+        h += `<div class="gen-dur-btn ${genState.duration===d?'selected':''}" onclick="genSelect('duration',${d})">${d} MIN</div>`;
+      });
+      h += '</div>';
+      body.innerHTML = h;
+    }
+  }
+}
+
+function genSelect(field, val){
+  if(field === 'dishfocus'){ genState.focus = [val]; }
+  else { genState[field] = val; }
+  renderGenStep();
+}
+
+function genToggleFocus(id){
+  const idx = genState.focus.indexOf(id);
+  if(idx > -1) genState.focus.splice(idx, 1);
+  else genState.focus.push(id);
+  renderGenStep();
+}
+
+function genNext(){
+  if(genState.step === 1){
+    if(!genState.players){ alert('Please select number of players.'); return; }
+    genState.step = 2;
+  } else if(genState.step === 2){
+    if(!genState.type){ alert('Please select a workout type.'); return; }
+    genState.step = 3;
+  } else if(genState.step === 3){
+    // Validate
+    if(genState.type === 'skills' && genState.focus.length === 0){ alert('Please select at least one focus area.'); return; }
+    if(genState.type === 'dish' && genState.focus.length === 0){ alert('Please select a focus.'); return; }
+    if(!genState.duration){ alert('Please select a workout length.'); return; }
+    // Generate
+    closeGenerate();
+    buildGeneratedWorkout();
+    return;
+  }
+  renderGenStep();
+}
+
+// ── BUILD THE GENERATED WORKOUT ──
+function buildGeneratedWorkout(){
+  const { players, type, focus, duration } = genState;
+
+  if(type === 'skills') buildSkillsWorkout(players, focus, duration);
+  else if(type === 'handles') buildHandlesWorkout(players, duration);
+  else if(type === 'dish') buildDishWorkoutFromGen(players, focus[0], duration);
+}
+
+function shuffle(arr){ return [...arr].sort(()=>Math.random()-.5); }
+
+function buildSkillsWorkout(players, focus, duration){
+  // Map focus to relevant categories
+  const finishCats = ['traffic','touch','layups','stride','bump','jail','downhill','prohop','power'];
+  const middyCats  = ['middy','stops','cop'];
+  const threeCats  = ['triple','ldb','ldtween','floats','wraps','crossovers','cutoff','live'];
+
+  let catIds = [];
+  if(focus.includes('finishing')) catIds = [...catIds, ...finishCats];
+  if(focus.includes('middy'))     catIds = [...catIds, ...middyCats];
+  if(focus.includes('three'))     catIds = [...catIds, ...threeCats];
+  catIds = [...new Set(catIds)];
+
+  // Estimate moves based on duration (approx 5 min per move for players>1, 3 min for solo)
+  const minsPerMove = players > 1 ? 5 : 3;
+  const targetMoves = Math.max(3, Math.floor(duration / minsPerMove));
+
+  // Pick random skills from relevant cats
+  let pool = [];
+  catIds.forEach(cid => {
+    const cat = ALL_CATS.find(c=>c.id===cid);
+    if(cat) cat.skills.forEach(s => pool.push({catId:cid, skill:s}));
+  });
+
+  const picked = shuffle(pool).slice(0, targetMoves);
+
+  // Clear and build workout
+  selected = {}; workoutOrder = [];
+  picked.forEach(({catId, skill}) => {
+    const key = getKey(catId, skill);
+    const mode = getMode(catId);
+    selected[key] = {catId, skill, mode, finish:null, finishName:null, startName:null, spotName:null};
+    workoutOrder.push(key);
+    // Auto-assign finish based on focus
+    if(mode === 'finish'){
+      if(focus.includes('finishing')) { selected[key].finish='rim'; randomFinish(key,'rim'); }
+      else if(focus.includes('middy')) { selected[key].finish='middy'; randomFinish(key,'middy'); }
+      else if(focus.includes('three')) { selected[key].finish='three'; randomFinish(key,'three'); }
+    }
+    if(mode === 'start') randomStart(key, catId);
+    if(mode === 'spot')  randomSpot(key);
+  });
+
+  updatePip();
+  showTab('workout');
+  renderFullWorkout();
+  renderBagContent();
+}
+
+function buildHandlesWorkout(players, duration){
+  // Clear bag workout and generate phil handles session
+  selected = {}; workoutOrder = [];
+  updatePip();
+  generatePhilWorkout();
+  // Filter to match duration
+  const drillsPerMin = 0.4;
+  const target = Math.max(4, Math.floor(duration * drillsPerMin));
+  philWorkout = philWorkout.slice(0, target);
+  showTab('workout');
+  renderFullWorkout();
+}
+
+function buildDishWorkoutFromGen(players, focus, duration){
+  // Set Dr Dish controls and generate
+  const focusMap = {threes:'shooting', middy:'combo', floaters:'finishing'};
+  const el = document.getElementById('dish-focus');
+  if(el) el.value = focusMap[focus] || 'combo';
+  const athEl = document.getElementById('dish-athletes');
+  if(athEl) athEl.value = Math.min(6, Math.max(3, players));
+  const durEl = document.getElementById('dish-duration');
+  if(durEl) durEl.value = duration;
+  // Set zones based on focus
+  if(focus === 'threes'){
+    const z = document.getElementById('z-three');
+    if(z){ z.checked = true; }
+  } else if(focus === 'floaters'){
+    const z = document.getElementById('z-paint');
+    if(z){ z.checked = true; }
+  } else {
+    const z = document.getElementById('z-mid');
+    if(z){ z.checked = true; }
+  }
+  showTab('dish');
+  generateDishWorkout();
+}
+
+// Sort all category skills alphabetically
+CATEGORIES.forEach(cat => {
+  cat.skills.sort((a,b) => a.localeCompare(b));
+});
+
+// ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 window.onerror = function(msg, src, line, col, err){
@@ -2626,6 +2897,24 @@ if(document.readyState === 'loading'){
       <div class="auth-field"><label class="auth-label">NOTES (optional)</label><input class="auth-input" type="text" id="hlNotes" placeholder="3rd quarter, plays 12-18"></div>
       <button class="auth-btn" style="margin-top:8px;" onclick="addHighlight()">ADD HIGHLIGHT</button>
       <div id="hlMsg" style="display:none;" class="auth-msg"></div>
+    </div>
+  </div>
+</div>
+
+<!-- GENERATE WORKOUT MODAL -->
+<div class="panel-overlay" id="generatePanel">
+  <div class="panel-modal" style="max-width:460px;">
+    <div class="panel-hdr">
+      <div>
+        <div class="panel-title">⚡ GENERATE WORKOUT</div>
+        <div style="font-family:'Space Mono',monospace;font-size:9px;color:var(--muted);margin-top:2px;" id="genStepLabel">STEP 1 OF 3</div>
+      </div>
+      <button class="panel-close" onclick="closeGenerate()">✕</button>
+    </div>
+    <div class="panel-body" id="generateBody"></div>
+    <div class="panel-footer" id="generateFooter">
+      <button class="btn btn-ghost" onclick="closeGenerate()">CANCEL</button>
+      <button class="btn btn-purple" id="genNextBtn" onclick="genNext()">NEXT</button>
     </div>
   </div>
 </div>
